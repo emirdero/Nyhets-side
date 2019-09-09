@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<head>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
 <body>
     <header class="header">
         <h1 id="header">Øving 3</h1>
@@ -13,7 +16,7 @@
         </ul>
     </div>
     <div class="contentContainer">
-        <div class="content">
+        <div class="content" id="test">
             <h1>What is Lorem Ipsum?</h1>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
         </div>
@@ -34,23 +37,19 @@
         <h3>Hi, im a footer</h3>
     </footer>
     <script>
-        function sendApiCall(){
-            var json;
-            fetch('http://bigdata.stud.iie.ntnu.no/sentiment/webresources/sentiment/log?api-key=Happy!!!', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8',
-            },
-            body: JSON.stringify({ sentence: document.getElementById("input").value }),
+        window.onload = hentArtikkler();
+        function hentArtikkler(){
+            let url = 'http://localhost:8080/artikkler';
+            fetch(url, {mode: 'no-cors'})
+            .then(function(response) {
+                return response.json();
             })
-            .then(response => response.json())
-            .then(json => jsonResponseHandler(json.value))
-            .catch(error => console.error("Error: ", error));
+            .then(function(myJson) {
+                console.log(JSON.stringify(myJson));
+            });
         }
-        function jsonResponseHandler(tall){
-            document.getElementById("output").innerHTML = tall;
-            var colors = ["red", "orange", "yellow", "blue", "green"];
-            document.getElementById("output").style.backgroundColor = colors[tall];
+        function jsonResponseHandler(json){
+            document.getElementById("test").innerHTML = json;
         }
     </script>
 </body>

@@ -13,13 +13,15 @@ var pool = mysql.createPool({
 app.use(bodyParser.json()); // for å tolke JSON
 
 app.get("/artikkler", (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
     console.log("Fikk request fra klient");
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
         if (err) {
-        console.log("Feil ved kobling til databasen");
-        res.json({ error: "feil ved ved oppkobling" });
-        } else {
+            console.log("Feil ved kobling til databasen");
+            res.json({ error: "feil ved ved oppkobling" });
+        } 
+        else {
             connection.query(
                 "select * from artikkel",
                 (err, rows) => {
@@ -45,7 +47,7 @@ app.post("/leggTilArtikkel", (req, res) => {
         res.json({ error: "feil ved oppkobling" });
         } else {
             console.log("Fikk databasekobling");
-            var val = [req.body.overskrift, req.body.innhold, req.body.bilde, req.body.kategoriId, viktighet];
+            var val = [req.body.overskrift, req.body.innhold, req.body.bilde, req.body.kategoriId, req.body.viktighet];
             connection.query(
                 "insert into artikkel (overskrift,innhold,bilde,kategoriId,viktighet) values (?,?,?,?,?)",
                 val,
