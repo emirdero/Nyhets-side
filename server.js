@@ -14,6 +14,7 @@ app.use(bodyParser.json()); // for å tolke JSON
 
 app.get("/artikkler", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     console.log("Fikk request fra klient");
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
@@ -38,7 +39,7 @@ app.get("/artikkler", (req, res) => {
         }
     });
 });
-app.post("/leggTilArtikkel", (req, res) => {
+app.post("/artikkler", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     console.log("Overskrift: " + req.body.overskrift);
     pool.getConnection((err, connection) => {
@@ -65,5 +66,6 @@ app.post("/leggTilArtikkel", (req, res) => {
         }
     });
 });
+
    
 var server = app.listen(8080);

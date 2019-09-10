@@ -12,11 +12,6 @@ body{
     margin: 20px;
     font-size: 30px;
 }
-.content:hover{
-    background-color: black;
-    transition-delay: 2s;
-    transition-duration: 5s;
-}
 #header{
     font-family: 'Courier New', Courier, monospace;
 }
