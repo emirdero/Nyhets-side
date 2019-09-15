@@ -39,6 +39,35 @@ app.get("/artikkler", (req, res) => {
         }
     });
 });
+
+app.get("/artikkler/:artikkelId", (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    console.log("Fikk request fra klient");
+    pool.getConnection((err, connection) => {
+        console.log("Connected to database");
+        if (err) {
+            console.log("Feil ved kobling til databasen");
+            res.json({ error: "feil ved ved oppkobling" });
+        } 
+        else {
+            connection.query(
+                "select * from artikkel where artikkelId=?", req.params.artikkelId,
+                (err, rows) => {
+                    connection.release();
+                    if (err) {
+                    console.log(err);
+                    res.json({ error: "error querying" });
+                    } else {
+                    console.log(rows);
+                    res.json(rows);
+                    }
+                }
+            );
+        }
+    });
+});
+
 app.post("/artikkler", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     console.log("Overskrift: " + req.body.overskrift);
