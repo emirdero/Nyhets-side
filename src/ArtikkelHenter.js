@@ -60,6 +60,56 @@ export default class ArtikkelHenter {
                 artikkel.appendChild(tittel);
                 hovedContainer.appendChild(artikkel);
             }
+        }
+        )
+    }
+
+    static async fjernArtikkel(artikkelId) {
+        $.ajax({
+            type: 'delete',
+            url: '/artikkler/' + artikkelId,
+            data: this.state,
+            success: function (data) {
+                console.log('Success');
+                window.location.href = "/";
+            },
+            error: function () {
+                console.log("Noe gikk galt, vennligst sjekk input");
+                document.getElementById("feedback").style.visibility = "visible";
+            }
+        })
+    }
+
+    static async redigerArtikkel(state) {
+        $.ajax({
+            type: 'put',
+            url: '/artikkler/' + state.artikkelId,
+            data: state,
+            success: function (data) {
+                console.log('Success');
+                window.location.href = "/";
+            },
+            error: function () {
+                console.log("Noe gikk galt, vennligst sjekk input");
+                document.getElementById("feedback").style.visibility = "visible";
+            }
+        })
+    }
+
+    static async leggTilArtikkel(state) {
+        $.ajax({
+            type: 'post',
+            url: '/artikkler',
+            data: state,
+            success: function (data) {
+                console.log(data);
+                console.log("Artikkel ble lagt til");
+                window.location.href = "/";
+            },
+            error: function () {
+                console.log("Noe gikk galt, vennligst sjekk input");
+                document.getElementById("feedback").style.visibility = "visible";
+            }
         })
     }
 }

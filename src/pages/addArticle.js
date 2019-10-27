@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
-import $ from "jquery";
+import ArtikkelHenter from "../ArtikkelHenter.js";
 
 export default class Home extends Component {
     constructor(props) {
@@ -22,20 +22,7 @@ export default class Home extends Component {
     }
 
     handleSubmit(event) {
-        console.log(this.state);
-        console.log(JSON.stringify(this.state));
-        $.ajax({
-            type: 'post',
-            url: '/artikkler',
-            data: this.state,
-            success: function (data) {
-                console.log('Success');
-                console.log(data);
-            },
-            error: function () {
-                console.log('We are sorry but our servers are having an issue right now');
-            }
-        })
+        ArtikkelHenter.leggTilArtikkel(this.state);
         event.preventDefault();
     }
     render() {
@@ -46,6 +33,7 @@ export default class Home extends Component {
                     <h1 id="header">Legg til artikkel</h1>
                 </header>
                 <Navbar location={location} />
+                <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>
                 <h2>Overskrift:</h2><input onChange={this.handleChange} name="overskrift" type="text" />
                 <h2>Innhold:</h2><input onChange={this.handleChange} name="innhold" type="text" />
                 <h2>Bilde:</h2><input onChange={this.handleChange} name="bilde" type="text" />

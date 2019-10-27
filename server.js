@@ -67,7 +67,8 @@ app.get("/artikkler/:artikkelId", (req, res) => {
                     if (err) {
                         console.log(err);
                         res.json({ error: "error querying" });
-                    } else {
+                    }
+                    else {
                         console.log(rows);
                         res.json(rows);
                     }
@@ -118,11 +119,15 @@ app.put("/artikkler/:artikkelId", (req, res) => {
             connection.query(
                 "update artikkel set overskrift=?,innhold=?,bilde=?,bildeAlt=?,kategoriId=?,viktighet=? where artikkelId=?",
                 val,
-                err => {
+                (err, result) => {
                     if (err) {
                         console.log(err);
                         res.status(500);
                         res.json({ error: "Feil ved insert" });
+                    } else if (result.affectedRows == 0) {
+                        console.log("Ingen endret")
+                        res.status(500);
+                        res.json({ error: "Ingen endret" });
                     } else {
                         console.log("Update gjennomført");
                         res.send("");
@@ -145,11 +150,15 @@ app.delete("/artikkler/:artikkelId", (req, res) => {
             connection.query(
                 "delete from artikkel where artikkelId=?",
                 val,
-                err => {
+                (err, result) => {
                     if (err) {
                         console.log(err);
                         res.status(500);
-                        res.json({ error: "Feil ved insert" });
+                        res.json({ error: "Feil ved slett" });
+                    } else if (result.affectedRows == 0) {
+                        console.log("Ingen slettet");
+                        res.status(500);
+                        res.json({ error: "Ingen slettet" });
                     } else {
                         console.log("Slett gjennomført");
                         res.send("");
