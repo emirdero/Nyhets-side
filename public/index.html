@@ -5,11 +5,11 @@
 </head>
 <body>
     <header class="header">
-        <h1 id="header">Øving 3</h1>
+        <h1 id="header">Øving 6</h1>
     </header>
     <div class="meny">
         <ul>
-            <li><a href="index.html">Home</a></li>
+            <li><a class="active" href="index.html">Home</a></li>
             <li><a href="nyArtikkel.html">Legg til artikkel</a></li>
             <li><a>Sport</a></li>
             <li><a>Vær</a></li>
@@ -34,7 +34,7 @@
         }
 
         function hentArtikkler(){
-            $.getJSON('http://localhost:8080/artikkler', function(data) {
+            $.getJSON('/artikkler', function(data) {
                  //Sjekker for endringer
                 if(previousData.length == data.length){
                     return 1;
@@ -54,6 +54,7 @@
 
                     var bilde = document.createElement("img");
                     bilde.src = data[i].bilde;
+                    bilde.alt = data[i].bildeAlt;
 
                     artikkel.appendChild(tittel);
                     artikkel.appendChild(innhold);

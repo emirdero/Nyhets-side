@@ -1,0 +1,7 @@
+a) 
+Alt tekst til bilder slik at blinde kan bruke siden likt
+Må være responsiv
+intuitiv bruk
+
+b)
+Tekst som forklarer det samme som bilde
