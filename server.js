@@ -13,7 +13,7 @@ var pool = mysql.createPool({
 });
 app.use(bodyParser.json()); // for å tolke JSON
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.get("/artikkler", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
@@ -55,7 +55,7 @@ app.get("/artikkler/:artikkelId", (req, res) => {
         }
         else {
             connection.query(
-                "select * from artikkel where artikkelId=?", req.params.artikkelId,
+                "select * from artikkel where artikkelId=? limit 20", req.params.artikkelId,
                 (err, rows) => {
                     connection.release();
                     if (err) {
