@@ -46,3 +46,8 @@ li a:focus {
 .active {
   background-color: #111111;
 }
+
+img {
+  width: 400px;
+  max-height: 400px;
+}

@@ -7,6 +7,7 @@
     "jquery": "^3.4.1",
     "mysql": "^2.17.1",
     "node": "^12.12.0",
+    "nodemon": "^1.19.4",
     "popper": "^1.0.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
@@ -14,7 +15,7 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "start": "SET PORT=8080 && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

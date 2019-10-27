@@ -11,11 +11,11 @@ var pool = mysql.createPool({
     database: "emirde",
     debug: false
 });
-app.use(bodyParser.json()); // for å tolke JSON
+app.use(bodyParser.urlencoded()); // for å tolke JSON
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get("/artikkler", (req, res) => {
+app.get("/artikkler/kategori/:kategoriId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     console.log("Fikk request fra klient");
@@ -26,8 +26,14 @@ app.get("/artikkler", (req, res) => {
             res.json({ error: "feil ved ved oppkobling" });
         }
         else {
+            var queryString = "select * from artikkel";
+            if (req.params.kategoriId != 0) {
+                queryString += " where kategoriId = " + req.params.kategoriId;
+            }
+            queryString += " order by innleggelseTid";
             connection.query(
-                "select * from artikkel",
+                queryString
+                ,
                 (err, rows) => {
                     connection.release();
                     if (err) {
@@ -80,9 +86,9 @@ app.post("/artikkler", (req, res) => {
             res.json({ error: "feil ved oppkobling" });
         } else {
             console.log("Fikk databasekobling");
-            var val = [req.body.overskrift, req.body.innhold, req.body.bilde, req.body.kategoriId, req.body.viktighet];
+            var val = [req.body.overskrift, req.body.innhold, req.body.bilde, req.body.bildeAlt, req.body.kategori, req.body.viktighet];
             connection.query(
-                "insert into artikkel (overskrift,innhold,bilde,kategoriId,viktighet) values (?,?,?,?,?)",
+                "insert into artikkel (overskrift,innhold,bilde,bildeAlt,kategoriId,viktighet) values (?,?,?,?,?,?)",
                 val,
                 err => {
                     if (err) {
@@ -91,6 +97,61 @@ app.post("/artikkler", (req, res) => {
                         res.json({ error: "Feil ved insert" });
                     } else {
                         console.log("insert ok");
+                        res.send("");
+                    }
+                }
+            );
+        }
+    });
+});
+
+app.put("/artikkler/:artikkelId", (req, res) => {
+    console.log("Fikk POST-request fra klienten");
+    console.log("Overskrift: " + req.body.overskrift);
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log("Feil ved oppkobling");
+            res.json({ error: "feil ved oppkobling" });
+        } else {
+            console.log("Fikk databasekobling");
+            var val = [req.body.overskrift, req.body.innhold, req.body.bilde, req.body.bildeAlt, req.body.kategori, req.body.viktighet, req.params.artikkelId];
+            connection.query(
+                "update artikkel set overskrift=?,innhold=?,bilde=?,bildeAlt=?,kategoriId=?,viktighet=? where artikkelId=?",
+                val,
+                err => {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.json({ error: "Feil ved insert" });
+                    } else {
+                        console.log("Update gjennomført");
+                        res.send("");
+                    }
+                }
+            );
+        }
+    });
+});
+
+app.delete("/artikkler/:artikkelId", (req, res) => {
+    console.log("Fikk POST-request fra klienten");
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log("Feil ved oppkobling");
+            res.json({ error: "feil ved oppkobling" });
+        } else {
+            console.log("Fikk databasekobling");
+            var val = [req.params.artikkelId];
+            connection.query(
+                "delete from artikkel where artikkelId=?",
+                val,
+                err => {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.json({ error: "Feil ved insert" });
+                    } else {
+                        console.log("Slett gjennomført");
                         res.send("");
                     }
                 }
