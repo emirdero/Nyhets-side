@@ -168,6 +168,6 @@ app.delete("/artikkler/:artikkelId", (req, res) => {
         }
     });
 });
-
-
-var server = app.listen(8080);
+let port = 8080;
+console.log("listening on port: " + port)
+var server = app.listen(port);
