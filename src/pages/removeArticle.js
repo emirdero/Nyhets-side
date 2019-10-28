@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
 import ArtikkelHenter from "../ArtikkelHenter";
 
-export default class Home extends Component {
+export default class RemoveArticle extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -33,8 +33,8 @@ export default class Home extends Component {
         const { location } = this.props;
         return (
             <form onSubmit={this.handleSubmit}>
-                <header className="header">
-                    <h1 id="header">Slett artikkel</h1>
+                <header className="p-3">
+                    <h1>Slett artikkel</h1>
                 </header>
                 <Navbar location={location} />
                 <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>

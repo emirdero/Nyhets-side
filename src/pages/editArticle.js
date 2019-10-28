@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
 import ArtikkelHenter from "../ArtikkelHenter";
 
-export default class Home extends Component {
+export default class EditArticle extends Component {
     constructor(props) {
         super(props);
         this.state = { kategori: '1', viktighet: '1' };
@@ -26,16 +26,22 @@ export default class Home extends Component {
     }
 
     handleSubmit(event) {
-        ArtikkelHenter.redigerArtikkel(this.state)
-        event.preventDefault();
+        // Input validering
+        if (this.state.artikkelId == null) {
+
+        }
+        else {
+
+        }
+        ArtikkelHenter.redigerArtikkel(this.state);
         event.preventDefault();
     }
     render() {
         const { location } = this.props;
         return (
             <form onSubmit={this.handleSubmit}>
-                <header className="header">
-                    <h1 id="header">Endre artikkel</h1>
+                <header className="p-3">
+                    <h1>Rediger artikkel</h1>
                 </header>
                 <Navbar location={location} />
                 <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>

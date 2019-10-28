@@ -5,7 +5,8 @@ export default class ArtikkelHenter {
         this.previousData = [];
     }
     static hentArtikkler(kategori) {
-        $.getJSON('/artikkler/kategori/' + kategori, function (data) {
+        var filmer = [];
+        /*$.getJSON('/artikkler/kategori/' + kategori, function (data) {
             let hovedContainer = document.getElementById("artikkelForelder");
             let liveFeed = document.getElementById("liveFeed");
             //Tømmer tabell for å fylle med nye
@@ -38,7 +39,7 @@ export default class ArtikkelHenter {
 
                 liveFeed.appendChild(feedItem);
             }
-        })
+        })*/
     }
 
     static hentTittler(kategori) {

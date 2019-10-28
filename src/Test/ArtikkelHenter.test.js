@@ -1,6 +1,5 @@
 var mysql = require("mysql");
-
-const PersonDao = require("./persondao.js");
+var app = require("../../server.js");
 const runsqlfile = require("./runsqlfile.js");
 
 // GitLab CI Pool
@@ -14,12 +13,37 @@ var pool = mysql.createPool({
     multipleStatements: true
 });
 
-let personDao = new PersonDao(pool);
+let artikkelHenter = new ArtikkelHenter();
+
+var chai = require('chai');
+var chaiHttp = require('chai-http');
+// Interesting part
+var app = require('../server/server');
+
+chai.use(chaiHttp);
+chai.should();
+
+describe('/users', function () {
+    it('returns users as JSON', function (done) {
+        // This is what launch the server
+        chai.request(app)
+            .get('/api/users')
+            .set('Authorization', auth.token)
+            .then(function (res) {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.instanceof(Array).and.have.length(1);
+                res.body[0].should.have.property('username').equal('admin');
+                done();
+            })
+            .catch(function (err) {
+                return done(err);
+            });
+    });
+});
 
 beforeAll(done => {
-    runsqlfile("dao/create_tables.sql", pool, () => {
-        runsqlfile("dao/create_testdata.sql", pool, done);
-    });
+    runsqlfile("artikkel.sql", pool, done);
 });
 
 afterAll(() => {
