@@ -28,36 +28,52 @@ export default class AddArticle extends Component {
     render() {
         const { location } = this.props;
         return (
-            <form onSubmit={this.handleSubmit}>
+            <div>
                 <header className="p-3">
                     <h1>Legg til artikkel</h1>
                 </header>
                 <Navbar location={location} />
-                <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>
-                <h2>Overskrift:</h2><input onChange={this.handleChange} name="overskrift" type="text" />
-                <h2>Innhold:</h2><input onChange={this.handleChange} name="innhold" type="text" />
-                <h2>Bilde:</h2><input onChange={this.handleChange} name="bilde" type="text" />
-                <h2>Bilde tekst:</h2><input onChange={this.handleChange} name="bildeAlt" type="text" />
-                <br />
-                <br />
-                <label>
-                    <select name="kategori" value={this.state.kategori} onChange={this.handleChange}>
-                        <option value="1"> Sport</option>
-                        <option value="2"> Nyheter</option>
-                        <option value="3"> Kultur</option>
-                    </select>
-                </label>
-                <label>
-                    <select name="viktighet" value={this.state.viktighet} onChange={this.handleChange}>
-                        <option value="1"> Svært viktig</option>
-                        <option value="2"> Middels viktig</option>
-                        <option value="3"> Lite viktig</option>
-                    </select>
-                </label>
-                <br />
-                <br />
-                <input type="submit" value="Submit" />
-            </form>
+                <form className="w-75 mx-auto" onSubmit={this.handleSubmit}>
+                    <div class="form-group">
+                        <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlInput1">Overskrift</label>
+                        <input onChange={this.handleChange} name="overskrift" type="text" className="form-control" id="formControlInput1" placeholder="min artikkel" />
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlInput2">Innhold</label>
+                        <input onChange={this.handleChange} name="innhold" type="text" className="form-control" id="formControlInput2" placeholder="min artikkel handler om..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlInput3">Bilde url</label>
+                        <input onChange={this.handleChange} name="bilde" type="text" className="form-control" id="formControlInput3" placeholder="http://eksempel.com/mittBilde.jpg" />
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlInput4">Bilde tekst</label>
+                        <input onChange={this.handleChange} name="bildeAlt" type="text" className="form-control" id="formControlInput4" placeholder="beskriv bildet" />
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlSelect1">Kategori</label>
+                        <select className="form-control" name="kategori" id="formControlSelect1" value={this.state.kategori} onChange={this.handleChange}>
+                            <option value="1"> Sport</option>
+                            <option value="2"> Nyheter</option>
+                            <option value="3"> Kultur</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlSelect2">Viktighet</label>
+                        <select className="form-control" name="viktighet" id="formControlSelect2" value={this.state.viktighet} onChange={this.handleChange}>
+                            <option value="1"> Svært viktig</option>
+                            <option value="2"> Middels viktig</option>
+                            <option value="3"> Lite viktig</option>
+                        </select>
+                    </div>
+                    <div className="text-center">
+                        <button className="btn btn-primary" type="submit">Send inn</button>
+                    </div>
+                </form>
+            </div>
         );
     }
 }

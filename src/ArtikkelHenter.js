@@ -6,49 +6,40 @@ export default class ArtikkelHenter {
     constructor() {
         this.previousData = [];
     }
-    static hentArtikkler(kategori) {
-        var artikkler = [];
+    static hentArtikler(kategori) {
+        var Artikler = [];
         $.ajax({
-            url: "/artikkler/kategori/" + kategori,
+            url: "/Artikler/kategori/" + kategori,
             type: "GET",
             dataType: "json",
             success: function (data) {
                 data.map(artikkel => {
-                    artikkler.push(artikkel);
+                    Artikler.push(artikkel);
                 });
             },
             async: false
         })
-        return artikkler;
+        return Artikler;
     }
 
-    static hentTittler(kategori) {
-        $.getJSON('/artikkler/kategori/' + kategori, function (data) {
-            let hovedContainer = document.getElementById("artikkelForelder");
-            //Tømmer tabell for å fylle med nye
-            hovedContainer.innerHTML = "";
-            for (var i = data.length - 1; i >= 0; i--) {
-                var artikkel = document.createElement("div");
-                artikkel.className = "content";
-
-                var id = document.createElement("p");
-                id.innerHTML = "Artikkel Id: " + data[i].artikkelId;
-
-                var tittel = document.createElement("h1");
-                tittel.innerHTML = data[i].overskrift;
-
-                artikkel.appendChild(id);
-                artikkel.appendChild(tittel);
-                hovedContainer.appendChild(artikkel);
-            }
-        }
-        )
+    static hentArtikkel(artikkelId) {
+        var artikkel;
+        $.ajax({
+            url: "/Artikler/" + artikkelId,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                artikkel = data;
+            },
+            async: false
+        })
+        return artikkel[0];
     }
 
     static async fjernArtikkel(artikkelId) {
         $.ajax({
             type: 'delete',
-            url: '/artikkler/' + artikkelId,
+            url: '/Artikler/' + artikkelId,
             data: this.state,
             success: function (data) {
                 console.log('Success');
@@ -64,7 +55,7 @@ export default class ArtikkelHenter {
     static async redigerArtikkel(state) {
         $.ajax({
             type: 'put',
-            url: '/artikkler/' + state.artikkelId,
+            url: '/Artikler/' + state.artikkelId,
             data: state,
             success: function (data) {
                 console.log('Success');
@@ -80,7 +71,7 @@ export default class ArtikkelHenter {
     static async leggTilArtikkel(state) {
         $.ajax({
             type: 'post',
-            url: '/artikkler',
+            url: '/Artikler',
             data: state,
             success: function (data) {
                 console.log(data);

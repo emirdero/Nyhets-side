@@ -34,10 +34,6 @@ export default class Navbar extends Component {
                         </ul>
                     </div>
                 </nav>
-                <div className="ticker-wrap">
-                    <div className="ticker" id="liveFeed">
-                    </div>
-                </div>
             </div>
         );
     }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
+import { IdDisplay } from "./artikkelFormaterer.js";
 import ArtikkelHenter from "../ArtikkelHenter";
 
 export default class RemoveArticle extends Component {
@@ -9,10 +10,6 @@ export default class RemoveArticle extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentDidMount() {
-        ArtikkelHenter.hentTittler(0);
     }
 
     handleChange(event) {
@@ -32,16 +29,32 @@ export default class RemoveArticle extends Component {
     render() {
         const { location } = this.props;
         return (
-            <form onSubmit={this.handleSubmit}>
+            <div>
                 <header className="p-3">
                     <h1>Slett artikkel</h1>
                 </header>
                 <Navbar location={location} />
-                <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>
-                <h2>Artikkel id:</h2><input onChange={this.handleChange} name="artikkelId" type="text" />
-                <input type="submit" value="Submit" />
-                <div className="contentContainer" id="artikkelForelder"></div>
-            </form>
+                <br />
+
+                <form className="w-50 mx-auto" onSubmit={this.handleSubmit}>
+                    <div class="form-group">
+                        <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>
+                    </div>
+                    <div className="row">
+                        <div className="form-group mb-2">
+                            <label type="text" class="form-control-plaintext" id="artikkelId">Artikkel id: </label>
+                        </div>
+                        <div className="form-group mx-sm-3 mb-2">
+                            <input onChange={this.handleChange} name="artikkelId" type="text" className="form-control" id="artikkelId" placeholder="eks: 23" />
+                        </div>
+                        <div className="text-center">
+                            <button className="btn btn-primary mb-2" type="submit">Slett</button>
+                        </div>
+                    </div>
+                </form>
+                <h2 className="text-center">Artikler:</h2>
+                {IdDisplay(this.props)}
+            </div>
         );
     }
 }

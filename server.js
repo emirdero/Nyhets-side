@@ -5,7 +5,7 @@ var app = express();
 var mysql = require("mysql");
 var pool = mysql.createPool({
     connectionLimit: 2,
-    host: "mysql.stud.iie.ntnu.no",
+    host: process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
     user: "emirde",
     password: "5AeX3tYs",
     database: "emirde",
@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded()); // for å tolke JSON
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get("/artikkler/kategori/:kategoriId", (req, res) => {
+app.get("/Artikler/kategori/:kategoriId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     console.log("Fikk request fra klient");
@@ -30,7 +30,7 @@ app.get("/artikkler/kategori/:kategoriId", (req, res) => {
             if (req.params.kategoriId != 0) {
                 queryString += " where kategoriId = " + req.params.kategoriId;
             }
-            queryString += " order by innleggelseTid";
+            queryString += " order by innleggelseTid DESC limit 20";
             connection.query(
                 queryString
                 ,
@@ -49,7 +49,7 @@ app.get("/artikkler/kategori/:kategoriId", (req, res) => {
     });
 });
 
-app.get("/artikkler/:artikkelId", (req, res) => {
+app.get("/Artikler/:artikkelId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     console.log("Fikk request fra klient");
@@ -61,7 +61,7 @@ app.get("/artikkler/:artikkelId", (req, res) => {
         }
         else {
             connection.query(
-                "select * from artikkel where artikkelId=? limit 20", req.params.artikkelId,
+                "select * from artikkel where artikkelId=?", req.params.artikkelId,
                 (err, rows) => {
                     connection.release();
                     if (err) {
@@ -78,7 +78,7 @@ app.get("/artikkler/:artikkelId", (req, res) => {
     });
 });
 
-app.post("/artikkler", (req, res) => {
+app.post("/Artikler", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     console.log("Overskrift: " + req.body.overskrift);
     pool.getConnection((err, connection) => {
@@ -106,7 +106,7 @@ app.post("/artikkler", (req, res) => {
     });
 });
 
-app.put("/artikkler/:artikkelId", (req, res) => {
+app.put("/Artikler/:artikkelId", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     console.log("Overskrift: " + req.body.overskrift);
     pool.getConnection((err, connection) => {
@@ -138,7 +138,7 @@ app.put("/artikkler/:artikkelId", (req, res) => {
     });
 });
 
-app.delete("/artikkler/:artikkelId", (req, res) => {
+app.delete("/Artikler/:artikkelId", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     pool.getConnection((err, connection) => {
         if (err) {
