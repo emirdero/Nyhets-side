@@ -40,7 +40,8 @@ function artikkelCard(artikkel) {
     );
 }
 
-function artikkelModal(artikkel) {
+async function artikkelModal(artikkel) {
+    let kommentarer = await ArtikkelHenter.hentKommentarer(artikkel.artikkelId);
     return (
         <div className="modal fade" id={"artikkel" + artikkel.artikkelId} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" role="document">
@@ -52,18 +53,34 @@ function artikkelModal(artikkel) {
                         </button>
                     </div>
                     <div className="modal-header">
-                        <h5>Likes: {artikkel.likes}</h5>
+                        <h5>Likes: </h5><h5 id={"artikkelLikes" + artikkel.artikkelId}>{artikkel.likes}</h5>
                         <button type="button" className="btn" aria-label="Like">Like</button>
                     </div>
                     <div className="modal-body">
                         {artikkel.fultInnhold}
                     </div>
+                    <div id="commentSection" className="modal-footer">
+                        {kommentarer.map((kommentar) => kommentarFormaterer(kommentar))}
+                    </div>
                     <div className="modal-footer">
-                        <input />
-                        <button type="button" className="btn btn-primary">Lagre kommentar</button>
+                        <input className="form-control" placeholder="Din kommentar" id="myComment" />
+                        <button type="button" className="btn btn-primary" onClick={"saveComment(" + artikkel.artikkelId + ")"}>Lagre</button>
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Lukk</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    );
+}
+
+export function kommentarFormaterer(kommentar) {
+    return (
+        <div>
+            <div>
+                <p>{kommentar.innhold}</p><button id={"likeKnapp" + kommentar.kommentarId} type="button" onClick={"likeComment(" + kommentar.kommentarId + ")"} className="btn" aria-label="Like">Like</button>
+            </div>
+            <div>
+                <p>Likes: </p><p id={"kommentarLikes" + kommentar.kommentarId}>{kommentar.likes}</p>
             </div>
         </div>
     );

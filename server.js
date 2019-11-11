@@ -40,7 +40,6 @@ app.get("/Artikler/kategori/:kategoriId", (req, res) => {
                         console.log(err);
                         res.json({ error: "error querying" });
                     } else {
-                        console.log(rows);
                         res.json(rows);
                     }
                 }
@@ -168,6 +167,95 @@ app.delete("/Artikler/:artikkelId", (req, res) => {
         }
     });
 });
+
+app.get("/Kommentarer/:artikkelId", (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    console.log("Fikk request fra klient");
+    pool.getConnection((err, connection) => {
+        console.log("Connected to database");
+        if (err) {
+            console.log("Feil ved kobling til databasen");
+            res.json({ error: "feil ved ved oppkobling" });
+        }
+        else {
+            connection.query(
+                "select * from kommentar where artikkelId = ?",
+                [parseInt(req.params.artikkelId)],
+                (err, rows) => {
+                    connection.release();
+                    if (err) {
+                        console.log(err);
+                        res.json({ error: "error querying" });
+                    }
+                    else {
+                        console.log(rows);
+                        res.json(rows);
+                    }
+                }
+            );
+        }
+    });
+});
+
+app.post("/Kommentarer", (req, res) => {
+    console.log("Fikk POST-request fra klienten");
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log("Feil ved oppkobling");
+            res.json({ error: "feil ved oppkobling" });
+        } else {
+            console.log("Fikk databasekobling");
+            var val = [req.body.innhold, req.body.artikkelId];
+            connection.query(
+                "insert into kommentar (innhold, artikkelId) values (?, ?)",
+                val,
+                err => {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.json({ error: "Feil ved insert" });
+                    } else {
+                        console.log("insert ok");
+                        res.send("");
+                    }
+                }
+            );
+        }
+    });
+});
+
+app.put("/Kommentarer/:kommentarId", (req, res) => {
+    console.log("Fikk POST-request fra klienten");
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log("Feil ved oppkobling");
+            res.json({ error: "feil ved oppkobling" });
+        } else {
+            console.log("Fikk databasekobling");
+            var val = [req.params.kommentarId];
+            connection.query(
+                "update kommentar SET likes = likes + 1 where kommentarId=?",
+                val,
+                (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.json({ error: "Feil ved insert" });
+                    } else if (result.affectedRows == 0) {
+                        console.log("Ingen endret")
+                        res.status(500);
+                        res.json({ error: "Ingen endret" });
+                    } else {
+                        console.log("Update gjennomført");
+                        res.send("");
+                    }
+                }
+            );
+        }
+    });
+});
+
 let port = 8080;
 console.log("listening on port: " + port)
 var server = app.listen(port);

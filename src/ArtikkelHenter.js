@@ -1,6 +1,7 @@
 
 // @flow
 import $ from "jquery";
+const axios = require('axios');
 
 export default class ArtikkelHenter {
     constructor() {
@@ -83,5 +84,41 @@ export default class ArtikkelHenter {
                 document.getElementById("feedback").style.visibility = "visible";
             }
         })
+    }
+
+    static async hentKommentarer(artikkelId) {
+        axios.get('/Kommentarer/' + artikkelId)
+            .then(function (response) {
+                console.log(response);
+                return response;
+            })
+            .catch(function (error) {
+                return error;
+            })
+    }
+
+    static async sendKommentar(innhold, artikkelId) {
+        axios.post('/Kommentarer', {
+            artikkelId: artikkelId,
+            innhold: innhold
+        })
+            .then(function (response) {
+                console.log(response);
+                return response;
+            })
+            .catch(function (error) {
+                return error;
+            })
+    }
+
+    static async likKommentar(kommentarId) {
+        axios.put('/Kommentarer/' + kommentarId)
+            .then(function (response) {
+                console.log(response);
+                return response;
+            })
+            .catch(function (error) {
+                return error;
+            })
     }
 }
