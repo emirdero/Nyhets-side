@@ -1,10 +1,11 @@
 import { Component } from "react";
-import { base } from "./artikkelFormaterer.js";
+import { ArticleView } from "../artikkelFormaterer.js";
+import React from "react";
 
 export default class Culture extends Component {
     render() {
         return (
-            base("Kultur", 3, this.props)
+            <ArticleView title="Kultur" kategori="3" location={this.props.location}> </ArticleView>
         );
     }
 }

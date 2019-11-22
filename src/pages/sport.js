@@ -1,10 +1,11 @@
 import { Component } from "react";
-import { base } from "./artikkelFormaterer.js";
+import { ArticleView } from "../artikkelFormaterer.js";
+import React from "react";
 
 export default class Sport extends Component {
     render() {
         return (
-            base("Sport", 1, this.props)
+            <ArticleView title="Sport" kategori="1" location={this.props.location}> </ArticleView>
         );
     }
 }

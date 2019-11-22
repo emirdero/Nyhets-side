@@ -1,10 +1,11 @@
 import { Component } from "react";
-import { base } from "./artikkelFormaterer.js";
+import { ArticleView } from "../artikkelFormaterer.js";
+import React from "react";
 
 export default class Home extends Component {
     render() {
         return (
-            base("Mini prosjekt", 0, this.props)
+            <ArticleView title="Mini prosjekt" kategori="0" location={this.props.location} > </ArticleView>
         );
     }
 }

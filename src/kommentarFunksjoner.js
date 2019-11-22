@@ -1,5 +1,5 @@
 import ArtikkelHenter from "../ArtikkelHenter";
-//import { kommentarFormaterer } from "./pages/artikkelFormaterer.js";
+//import { kommentarFormaterer } from "../pages/artikkelFormaterer.js";
 
 export function likeComment(kommentarId) {
     var likes = document.getElementById("kommentarLikes" + kommentarId);

@@ -5,10 +5,10 @@ var app = express();
 var mysql = require("mysql");
 var pool = mysql.createPool({
     connectionLimit: 2,
-    host: process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
-    user: "emirde",
-    password: "5AeX3tYs",
-    database: "emirde",
+    host: process.env.CI ? 'mysql' : "localhost", //"mysql.stud.iie.ntnu.no",
+    user: "root",//"emirde",
+    password: "",//"5AeX3tYs",
+    database: "mydb",//"emirde",
     debug: false
 });
 app.use(bodyParser.urlencoded()); // for å tolke JSON
@@ -17,7 +17,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 app.get("/Artikler/kategori/:kategoriId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", "localhost"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("Fikk request fra klient");
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
@@ -50,7 +51,8 @@ app.get("/Artikler/kategori/:kategoriId", (req, res) => {
 
 app.get("/Artikler/:artikkelId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", "localhost"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("Fikk request fra klient");
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
@@ -168,6 +170,34 @@ app.delete("/Artikler/:artikkelId", (req, res) => {
     });
 });
 
+app.get("/Kommentarer", (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    console.log("Fikk request fra klient");
+    pool.getConnection((err, connection) => {
+        console.log("Connected to database");
+        if (err) {
+            console.log("Feil ved kobling til databasen");
+            res.json({ error: "feil ved ved oppkobling" });
+        }
+        else {
+            connection.query(
+                "select * from kommentar",
+                (err, rows) => {
+                    connection.release();
+                    if (err) {
+                        console.log(err);
+                        res.json({ error: "error querying" });
+                    }
+                    else {
+                        res.json(rows);
+                    }
+                }
+            );
+        }
+    });
+});
+
 app.get("/Kommentarer/:artikkelId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -189,7 +219,6 @@ app.get("/Kommentarer/:artikkelId", (req, res) => {
                         res.json({ error: "error querying" });
                     }
                     else {
-                        console.log(rows);
                         res.json(rows);
                     }
                 }

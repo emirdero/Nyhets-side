@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
-import { IdDisplay } from "./artikkelFormaterer.js";
+import { IdDisplay } from "../artikkelFormaterer.js";
 import ArtikkelHenter from "../ArtikkelHenter.js";
 
 export default class EditArticle extends Component {
@@ -111,7 +111,7 @@ export default class EditArticle extends Component {
                     </div>
                 </form>
                 <h2 className="text-center">Artikler:</h2>
-                {IdDisplay(this.props)}
+                <IdDisplay></IdDisplay>
             </div>
         );
     }

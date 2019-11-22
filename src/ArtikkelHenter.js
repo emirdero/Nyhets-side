@@ -3,24 +3,25 @@
 import $ from "jquery";
 const axios = require('axios');
 
+var testing = "http://localhost:8080";
+
 export default class ArtikkelHenter {
     constructor() {
         this.previousData = [];
     }
     static hentArtikler(kategori) {
-        var Artikler = [];
         $.ajax({
-            url: "/Artikler/kategori/" + kategori,
+            url: testing + "/Artikler/kategori/" + kategori,
             type: "GET",
+            headers: {
+                'Access-Control-Allow-Origin': 'localhost'
+            },
             dataType: "json",
             success: function (data) {
-                data.map(artikkel => {
-                    Artikler.push(artikkel);
-                });
+                return data;
             },
             async: false
         })
-        return Artikler;
     }
 
     static hentArtikkel(artikkelId) {
@@ -86,16 +87,30 @@ export default class ArtikkelHenter {
         })
     }
 
-    static async hentKommentarer(artikkelId) {
-        axios.get('/Kommentarer/' + artikkelId)
-            .then(function (response) {
-                console.log(response);
-                return response;
-            })
-            .catch(function (error) {
-                return error;
-            })
+    static hentKommentarer(artikkelId) {
+        var kommentarer;
+        $.ajax({
+            url: "/Kommentarer/" + artikkelId,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                kommentarer = data;
+            },
+            async: false
+        })
+        return kommentarer;
+        /*axios.get('/Kommentarer/' + artikkelId)
+        .then(function (response) {
+            console.log(response);
+            return response;
+        })
+        .catch(function (error) {
+            return error;
+        }
+    )*/
     }
+
+
 
     static async sendKommentar(innhold, artikkelId) {
         axios.post('/Kommentarer', {
