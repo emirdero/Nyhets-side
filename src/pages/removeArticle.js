@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
-import { IdDisplay } from "../artikkelFormaterer.js";
+import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView.js";
 import ArtikkelHenter from "../ArtikkelHenter";
 
 export default class RemoveArticle extends Component {
@@ -53,7 +53,7 @@ export default class RemoveArticle extends Component {
                     </div>
                 </form>
                 <h2 className="text-center">Artikler:</h2>
-                <IdDisplay></IdDisplay>
+                <ArticleIdandTitleView></ArticleIdandTitleView>
             </div>
         );
     }

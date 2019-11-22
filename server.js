@@ -3,12 +3,13 @@ var bodyParser = require("body-parser");
 const path = require('path');
 var app = express();
 var mysql = require("mysql");
+var devmode = false;
 var pool = mysql.createPool({
     connectionLimit: 2,
-    host: process.env.CI ? 'mysql' : "localhost", //"mysql.stud.iie.ntnu.no",
-    user: "root",//"emirde",
-    password: "",//"5AeX3tYs",
-    database: "mydb",//"emirde",
+    host: process.env.CI ? 'mysql' : devmode ? "localhost" : "mysql.stud.iie.ntnu.no",
+    user: devmode ? "root" : "emirde",
+    password: devmode ? "" : "5AeX3tYs",
+    database: devmode ? "mydb" : "emirde",
     debug: false
 });
 app.use(bodyParser.urlencoded()); // for å tolke JSON
@@ -198,7 +199,7 @@ app.get("/Kommentarer", (req, res) => {
     });
 });
 
-app.get("/Kommentarer/:artikkelId", (req, res) => {
+app.get("/Kommentarer/:kategoriId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     console.log("Fikk request fra klient");
@@ -210,8 +211,8 @@ app.get("/Kommentarer/:artikkelId", (req, res) => {
         }
         else {
             connection.query(
-                "select * from kommentar where artikkelId = ?",
-                [parseInt(req.params.artikkelId)],
+                "select * from kommentar join artikkel where kategoriId = ?",
+                [parseInt(req.params.kategoriId)],
                 (err, rows) => {
                     connection.release();
                     if (err) {
@@ -226,6 +227,7 @@ app.get("/Kommentarer/:artikkelId", (req, res) => {
         }
     });
 });
+
 
 app.post("/Kommentarer", (req, res) => {
     console.log("Fikk POST-request fra klienten");

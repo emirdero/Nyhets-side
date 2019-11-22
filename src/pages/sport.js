@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { ArticleView } from "../artikkelFormaterer.js";
+import { ArticleView } from "../components/ArticleView.js";
 import React from "react";
 
 export default class Sport extends Component {

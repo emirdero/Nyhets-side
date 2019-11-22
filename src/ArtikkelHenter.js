@@ -27,7 +27,7 @@ export default class ArtikkelHenter {
     static hentArtikkel(artikkelId) {
         var artikkel;
         $.ajax({
-            url: "/Artikler/" + artikkelId,
+            url: testing + "/Artikler/" + artikkelId,
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -41,7 +41,7 @@ export default class ArtikkelHenter {
     static async fjernArtikkel(artikkelId) {
         $.ajax({
             type: 'delete',
-            url: '/Artikler/' + artikkelId,
+            url: testing + '/Artikler/' + artikkelId,
             data: this.state,
             success: function (data) {
                 console.log('Success');
@@ -73,7 +73,7 @@ export default class ArtikkelHenter {
     static async leggTilArtikkel(state) {
         $.ajax({
             type: 'post',
-            url: '/Artikler',
+            url: testing + '/Artikler',
             data: state,
             success: function (data) {
                 console.log(data);
@@ -90,7 +90,7 @@ export default class ArtikkelHenter {
     static hentKommentarer(artikkelId) {
         var kommentarer;
         $.ajax({
-            url: "/Kommentarer/" + artikkelId,
+            url: testing + "/Kommentarer/" + artikkelId,
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -113,7 +113,7 @@ export default class ArtikkelHenter {
 
 
     static async sendKommentar(innhold, artikkelId) {
-        axios.post('/Kommentarer', {
+        axios.post(testing + '/Kommentarer', {
             artikkelId: artikkelId,
             innhold: innhold
         })
@@ -126,8 +126,8 @@ export default class ArtikkelHenter {
             })
     }
 
-    static async likKommentar(kommentarId) {
-        axios.put('/Kommentarer/' + kommentarId)
+    static async sendLike(kommentarId) {
+        axios.put(testing + '/Kommentarer/' + kommentarId)
             .then(function (response) {
                 console.log(response);
                 return response;
