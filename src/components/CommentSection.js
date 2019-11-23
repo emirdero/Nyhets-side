@@ -1,7 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import ArtikkelHenter from "../ArtikkelHenter";
-const axios = require('axios');
+import ArticleService from "../ArticleService";
 
 export class CommentSection extends Component {
     loadingComments = true;
@@ -72,7 +71,7 @@ class LikeButtonComment extends Component {
         likes.innerHTML = parseInt(likes.innerHTML) + 1;
         document.getElementById("likeKnapp" + kommentarId).disabled = true;
         localStorage.setItem('comment' + kommentarId, 'true');
-        ArtikkelHenter.sendLikeComment(kommentarId);
+        ArticleService.sendLikeComment(kommentarId);
     }
 
     checkLikedComments() {
@@ -89,7 +88,7 @@ class LikeButtonComment extends Component {
 
     render() {
         return (
-            <button className="btn sm bg-success text-white" id={"likeKnapp" + this.props.comment.kommentarId} type="button" onClick={() => this.likeComment(this.props.comment.kommentarId)} aria-label="Like">
+            <button className="btn sm bg-success text-white float-md-left" id={"likeKnapp" + this.props.comment.kommentarId} type="button" onClick={() => this.likeComment(this.props.comment.kommentarId)} aria-label="Like">
                 <div className="row ml-1 mr-1 mb-0">
                     <p className="sm mb-0">Likes: </p>
                     <p className="sm mb-0" id={"kommentarLikes" + this.props.comment.kommentarId}>{this.props.comment.likes}</p>

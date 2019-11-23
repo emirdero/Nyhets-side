@@ -1,3 +1,4 @@
+// @flow
 var express = require("express");
 var bodyParser = require("body-parser");
 const path = require('path');
@@ -6,7 +7,7 @@ var mysql = require("mysql");
 
 var pool = mysql.createPool({
     connectionLimit: 2,
-    host: process.env.CI ? 'mysql' : devmode ? "localhost" : "mysql.stud.iie.ntnu.no",
+    host: process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
     user: process.env.CI ? "root" : "emirde",
     password: process.env.CI ? "secret" : "5AeX3tYs",
     database: process.env.CI ? "mydb" : "emirde",
@@ -30,8 +31,9 @@ app.get("/Artikler/kategori/:kategoriId", (req, res) => {
         }
         else {
             var queryString = "select * from artikkel";
-            if (req.params.kategoriId != 0) {
-                queryString += " where kategoriId = " + req.params.kategoriId;
+            var kategoriId = req.params.kategoriId;
+            if (kategoriId != 0) {
+                queryString += " where kategoriId = " + kategoriId;
             }
             queryString += " order by innleggelseTid DESC limit 20";
             connection.query(
@@ -90,9 +92,9 @@ app.post("/Artikler", (req, res) => {
             res.json({ error: "feil ved oppkobling" });
         } else {
             console.log("Fikk databasekobling");
-            var val = [req.body.overskrift, req.body.innhold, req.body.bilde, req.body.bildeAlt, req.body.kategori, req.body.viktighet];
+            var val = [req.body.overskrift, req.body.innhold, req.body.fultInnhold, req.body.bilde, req.body.bildeAlt, req.body.kategori, req.body.viktighet];
             connection.query(
-                "insert into artikkel (overskrift,innhold,bilde,bildeAlt,kategoriId,viktighet) values (?,?,?,?,?,?)",
+                "insert into artikkel (overskrift,innhold,fultInnhold,bilde,bildeAlt,kategoriId,viktighet) values (?,?,?,?,?,?,?)",
                 val,
                 err => {
                     if (err) {
@@ -205,7 +207,6 @@ app.delete("/Artikler/:artikkelId", (req, res) => {
 
 app.get("/Kommentarer", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     console.log("Fikk request fra klient");
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
@@ -233,7 +234,6 @@ app.get("/Kommentarer", (req, res) => {
 
 app.get("/Kommentarer/:kategoriId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     console.log("Fikk request fra klient");
     pool.getConnection((err, connection) => {
         console.log("Connected to database");

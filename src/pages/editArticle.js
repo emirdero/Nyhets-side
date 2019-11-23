@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
 import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView";
-import ArtikkelHenter from "../ArtikkelHenter.js";
-const axios = require('axios');
+import ArticleService from "../ArticleService.js";
 
 export default class EditArticle extends Component {
     constructor(props) {
@@ -15,18 +14,13 @@ export default class EditArticle extends Component {
     }
 
     componentDidMount() {
-        this.getArtikkler(0);
-    }
-    async getArtikkler(kategori) {
-        var testing = "http://localhost:8080";
-        axios
-            .get(testing + "/Artikler/kategori/" + kategori)
+        ArticleService.getArticles(0)
             .then(data => { this.setState({ artikkler: data.data }) })
             .catch(err => {
                 console.log(err);
                 return null;
             });
-    };
+    }
 
     handleChange(event) {
         const target = event.target;
@@ -44,7 +38,8 @@ export default class EditArticle extends Component {
             document.getElementById("feedback").style.visibility = "visible";
         }
         else {
-            ArtikkelHenter.redigerArtikkel(this.state);
+            ArticleService.redigerArtikkel(this.state)
+                .then(response => { window.location = "/" })
             event.preventDefault();
         }
     }
@@ -68,22 +63,27 @@ export default class EditArticle extends Component {
                 document.getElementById("feedbackHent").innerHTML = "Id matcher ingen av artikklene";
             }
             else {
-                let artikkel = ArtikkelHenter.hentArtikkel(document.getElementById("formControlInput0").value);
-                console.log(artikkel);
-                document.getElementById("formControlInput1").value = artikkel.overskrift;
-                document.getElementById("formControlInput2").value = artikkel.innhold;
-                document.getElementById("formControlInput3").value = artikkel.bilde;
-                document.getElementById("formControlInput4").value = artikkel.bildeAlt;
-                document.getElementById("formControlSelect1").value = artikkel.kategoriId;
-                document.getElementById("formControlSelect2").value = artikkel.viktighet;
-                this.setState({
-                    overskrift: artikkel.overskrift,
-                    innhold: artikkel.innhold,
-                    bilde: artikkel.bilde,
-                    bildeAlt: artikkel.bildeAlt,
-                    kategoriId: artikkel.kategoriId,
-                    viktighet: artikkel.viktighet
-                });
+                ArticleService.hentArtikkel(document.getElementById("formControlInput0").value)
+                    .then(response => {
+                        let artikkel = response.data[0];
+                        console.log(artikkel);
+                        document.getElementById("formControlInput1").value = artikkel.overskrift;
+                        document.getElementById("formControlInput2").value = artikkel.innhold;
+                        document.getElementById("formControlInput3").value = artikkel.fultInnhold;
+                        document.getElementById("formControlInput4").value = artikkel.bilde;
+                        document.getElementById("formControlInput5").value = artikkel.bildeAlt;
+                        document.getElementById("formControlSelect1").value = artikkel.kategoriId;
+                        document.getElementById("formControlSelect2").value = artikkel.viktighet;
+                        this.setState({
+                            overskrift: artikkel.overskrift,
+                            innhold: artikkel.innhold,
+                            fultInnhold: artikkel.fultInnhold,
+                            bilde: artikkel.bilde,
+                            bildeAlt: artikkel.bildeAlt,
+                            kategoriId: artikkel.kategoriId,
+                            viktighet: artikkel.viktighet
+                        });
+                    })
             }
         }
     }
@@ -117,11 +117,15 @@ export default class EditArticle extends Component {
                         <input onChange={this.handleChange} name="innhold" type="text" className="form-control" id="formControlInput2" placeholder="min artikkel handler om..." />
                     </div>
                     <div class="form-group">
-                        <label for="formControlInput3">Ny bilde url</label>
+                        <label for="formControlInput3">Ny artikkel tekst</label>
+                        <textarea onChange={this.handleChange} name="fultInnhold" type="textarea" className="form-control" id="formControlInput3" placeholder="min artikkel handler om..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlInput4">Ny bilde url</label>
                         <input onChange={this.handleChange} name="bilde" type="text" className="form-control" id="formControlInput3" placeholder="http://eksempel.com/mittBilde.jpg" />
                     </div>
                     <div class="form-group">
-                        <label for="formControlInput4">Ny bilde tekst</label>
+                        <label for="formControlInput5">Ny bilde tekst</label>
                         <input onChange={this.handleChange} name="bildeAlt" type="text" className="form-control" id="formControlInput4" placeholder="beskriv bildet" />
                     </div>
                     <div class="form-group">

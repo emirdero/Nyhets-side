@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
-import ArtikkelHenter from "../ArtikkelHenter.js";
+import ArticleService from "../ArticleService.js";
 
 export default class AddArticle extends Component {
     constructor(props) {
@@ -22,7 +22,8 @@ export default class AddArticle extends Component {
     }
 
     handleSubmit(event) {
-        ArtikkelHenter.leggTilArtikkel(this.state);
+        ArticleService.leggTilArtikkel(this.state)
+            .then(data => { window.location = "/" });
         event.preventDefault();
     }
     render() {
@@ -46,11 +47,15 @@ export default class AddArticle extends Component {
                         <input onChange={this.handleChange} name="innhold" type="text" className="form-control" id="formControlInput2" placeholder="min artikkel handler om..." />
                     </div>
                     <div class="form-group">
-                        <label for="formControlInput3">Bilde url</label>
+                        <label for="formControlInput3">Artikkel tekst</label>
+                        <textarea onChange={this.handleChange} name="fultInnhold" type="text" className="form-control" id="formControlInput3" placeholder="min artikkel handler om..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="formControlInput4">Bilde url</label>
                         <input onChange={this.handleChange} name="bilde" type="text" className="form-control" id="formControlInput3" placeholder="http://eksempel.com/mittBilde.jpg" />
                     </div>
                     <div class="form-group">
-                        <label for="formControlInput4">Bilde tekst</label>
+                        <label for="formControlInput5">Bilde tekst</label>
                         <input onChange={this.handleChange} name="bildeAlt" type="text" className="form-control" id="formControlInput4" placeholder="beskriv bildet" />
                     </div>
                     <div class="form-group">

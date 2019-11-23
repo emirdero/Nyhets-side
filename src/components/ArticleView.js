@@ -2,25 +2,20 @@ import React from "react";
 import Navbar from "./Navbar.js";
 import { ArtikkelModalContainer } from "./ArtikkelModalContainer.js";
 import { Component } from "react";
-const axios = require('axios');
+import ArticleService from "../ArticleService.js";
 
 export class ArticleView extends Component {
     state = {
-        artikkler: []
+        articles: []
     }
     componentDidMount() {
-        this.getArtikkler(this.props.kategori);
-    }
-    async getArtikkler(kategori) {
-        var testing = "http://localhost:8080";
-        axios
-            .get(testing + "/Artikler/kategori/" + kategori)
-            .then(data => { this.setState({ artikkler: data.data }) })
+        ArticleService.getArticles(this.props.kategori)
+            .then(data => { this.setState({ articles: data.data }) })
             .catch(err => {
                 console.log(err);
                 return null;
             });
-    };
+    }
 
     render() {
         return (
@@ -29,18 +24,18 @@ export class ArticleView extends Component {
                     <h1>{this.props.title}</h1>
                 </header>
                 <Navbar location={this.props.location} />
-                {this.state.artikkler.length === 0 ?
+                {this.state.articles.length === 0 ?
                     (<div>Loading...</div>) :
                     (<div><div className="card-columns">
-                        {this.state.artikkler.map(temp => artikkelCard(temp))}
+                        {this.state.articles.map(temp => artikkelCard(temp))}
                     </div>
                         <div className="ticker-wrap">
                             <div className="ticker" id="liveFeed">
-                                {this.state.artikkler.map(temp => tickerItem(temp))}
+                                {this.state.articles.map(temp => tickerItem(temp))}
                             </div>
                         </div>
                         <div>
-                            <ArtikkelModalContainer artikkeler={this.state.artikkler}></ArtikkelModalContainer>
+                            <ArtikkelModalContainer artikkeler={this.state.articles}></ArtikkelModalContainer>
                         </div>
                     </div>)
 

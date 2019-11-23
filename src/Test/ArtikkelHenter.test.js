@@ -1,3 +1,4 @@
+import ArticleService from "../ArticleService.js";
 var mysql = require("mysql");
 var app = require("../../server.js");
 const runsqlfile = require("./runsqlfile.js");
@@ -13,37 +14,8 @@ var pool = mysql.createPool({
     multipleStatements: true
 });
 
-let artikkelHenter = new ArtikkelHenter();
-
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-// Interesting part
-var app = require('../server/server');
-
-chai.use(chaiHttp);
-chai.should();
-
-describe('/users', function () {
-    it('returns users as JSON', function (done) {
-        // This is what launch the server
-        chai.request(app)
-            .get('/api/users')
-            .set('Authorization', auth.token)
-            .then(function (res) {
-                res.should.have.status(200);
-                res.should.be.json;
-                res.body.should.be.instanceof(Array).and.have.length(1);
-                res.body[0].should.have.property('username').equal('admin');
-                done();
-            })
-            .catch(function (err) {
-                return done(err);
-            });
-    });
-});
-
 beforeAll(done => {
-    runsqlfile("artikkel.sql", pool, done);
+    runsqlfile("src/Test/mydb.sql", pool, done);
 });
 
 afterAll(() => {
@@ -51,18 +23,17 @@ afterAll(() => {
 });
 
 test("get one person from db", done => {
-    function callback(status, data) {
+    ArticleService.getArticles(0).then(response => {
+        let articles = response.data
         console.log(
-            "Test callback: status=" + status + ", data=" + JSON.stringify(data)
+            "Test callback: data=" + JSON.stringify(articles)
         );
-        expect(data.length).toBe(1);
-        expect(data[0].navn).toBe("Hei Sveisen");
+        expect(articles.length).toBe(9);
+        expect(articles[0].overskrift).toBe("Ugler i mosen");
         done();
-    }
-
-    personDao.getOne(1, callback);
+    })
 });
-
+/*
 test("get unknown person from db", done => {
     function callback(status, data) {
         console.log(
@@ -130,3 +101,4 @@ test("test slett", done => {
         callback
     );
 });
+*/

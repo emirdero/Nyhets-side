@@ -1,9 +1,7 @@
 import React from "react";
 import { Component } from "react";
 import { CommentSection, Comment } from "./CommentSection.js";
-import ArtikkelHenter from "../ArtikkelHenter";
-import $ from "jquery";
-const axios = require('axios');
+import ArticleService from "../ArticleService";
 
 export class ArtikkelModalContainer extends Component {
     state = {
@@ -15,9 +13,7 @@ export class ArtikkelModalContainer extends Component {
     }
 
     async getComments(artikkelId) {
-        var testing = "http://localhost:8080";
-        axios
-            .get(testing + "/Kommentarer")
+        ArticleService.getAllComments()
             .then(data => { this.setState({ kommentarer: data.data }); console.log(data.data) })
             .catch(err => {
                 console.log(err);
@@ -42,13 +38,12 @@ class ArtikkelModal extends Component {
     }
 
     async sendKommentar(innhold, artikkelId) {
-        var testing = "http://localhost:8080";
         console.log(innhold);
         const data = {
             artikkelId: artikkelId,
             innhold: innhold
         };
-        axios.post(testing + '/Kommentarer', data)
+        ArticleService.sendComment(data)
             .then(function (response) {
                 alert("kommentar sendt!");
                 var newComment = {
@@ -73,7 +68,7 @@ class ArtikkelModal extends Component {
         likes.innerHTML = "Likes: " + (parseInt(likes.innerHTML.split(" ")[1]) + 1);
         document.getElementById("articleLikeButton" + artikkelId).disabled = true;
         localStorage.setItem('article' + artikkelId, 'true');
-        ArtikkelHenter.sendLikeArticle(artikkelId);
+        ArticleService.sendLikeArticle(artikkelId);
     }
 
     checkIfArticleAlreadyLiked(artikkelId) {

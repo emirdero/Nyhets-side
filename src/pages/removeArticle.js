@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
 import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView";
-import ArtikkelHenter from "../ArtikkelHenter";
-const axios = require('axios');
+import ArticleService from "../ArticleService";
 
 export default class RemoveArticle extends Component {
     constructor(props) {
@@ -14,20 +13,13 @@ export default class RemoveArticle extends Component {
     }
 
     componentDidMount() {
-        this.getArtikkler(0);
-    }
-
-    async getArtikkler(kategori) {
-        var testing = "http://localhost:8080";
-        axios
-            .get(testing + "/Artikler/kategori/" + kategori)
+        ArticleService.getArticles(0)
             .then(data => { this.setState({ artikkler: data.data }) })
             .catch(err => {
                 console.log(err);
                 return null;
             });
-    };
-
+    }
 
     handleChange(event) {
         const target = event.target;
@@ -40,8 +32,29 @@ export default class RemoveArticle extends Component {
     }
 
     handleSubmit(event) {
-        ArtikkelHenter.fjernArtikkel(this.state.artikkelId)
-        event.preventDefault();
+        // Input validering
+        if (this.state.artikkelId == null || this.state.artikkelId == "") {
+            document.getElementById("feedback").style.visibility = "visible";
+            document.getElementById("feedback").innerHTML = "Vennligst skriv inn en Id";
+        }
+        else {
+            let found = false;
+            for (var i = 0; i < this.state.artikkler.length; i++) {
+                if (this.state.artikkelId == this.state.artikkler[i].artikkelId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                document.getElementById("feedback").style.visibility = "visible";
+                document.getElementById("feedback").innerHTML = "Id matcher ingen av artikklene";
+            }
+            else {
+                ArticleService.fjernArtikkel(this.state.artikkelId)
+                    .then(response => { window.location = "/" })
+            }
+            event.preventDefault();
+        }
     }
     render() {
         const { location } = this.props;
@@ -54,15 +67,13 @@ export default class RemoveArticle extends Component {
                 <br />
 
                 <form className="w-50 mx-auto" onSubmit={this.handleSubmit}>
-                    <div class="form-group">
-                        <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>
-                    </div>
                     <div className="row">
                         <div className="form-group mb-2">
                             <label type="text" class="form-control-plaintext" id="artikkelId">Artikkel id: </label>
                         </div>
                         <div className="form-group mx-sm-3 mb-2">
                             <input onChange={this.handleChange} name="artikkelId" type="text" className="form-control" id="artikkelId" placeholder="eks: 23" />
+                            <h4 id="feedback" style={{ visibility: "hidden", color: "red", paddingLeft: "5px" }}>Noe gikk galt, vennligst sjekk input</h4>
                         </div>
                         <div className="text-center">
                             <button className="btn btn-primary mb-2" type="submit">Slett</button>
