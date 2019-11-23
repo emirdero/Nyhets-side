@@ -62,7 +62,7 @@ class LikeButtonComment extends Component {
         likes.innerHTML = parseInt(likes.innerHTML) + 1;
         document.getElementById("likeKnapp" + kommentarId).disabled = true;
         localStorage.setItem('comment' + kommentarId, 'true');
-        ArtikkelHenter.sendLike(kommentarId);
+        ArtikkelHenter.sendLikeComment(kommentarId);
     }
 
     checkLikedComments() {

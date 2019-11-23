@@ -1,24 +1,11 @@
 import React from "react";
 import { Component } from "react";
-const axios = require('axios');
 
 export class ArticleIdandTitleView extends Component {
     state = {
-        artikkler: []
+        artikkler: this.props.artikkler
     }
-    componentDidMount() {
-        this.getArtikkler(0);
-    }
-    async getArtikkler(kategori) {
-        var testing = "http://localhost:8080";
-        axios
-            .get(testing + "/Artikler/kategori/" + kategori)
-            .then(data => { this.setState({ artikkler: data.data }) })
-            .catch(err => {
-                console.log(err);
-                return null;
-            });
-    };
+
     render() {
         return (
             <div>

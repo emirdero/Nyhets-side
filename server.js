@@ -140,6 +140,37 @@ app.put("/Artikler/:artikkelId", (req, res) => {
     });
 });
 
+app.put("/Artikler/Like/:artikkelId", (req, res) => {
+    console.log("Fikk POST-request fra klienten");
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log("Feil ved oppkobling");
+            res.json({ error: "feil ved oppkobling" });
+        } else {
+            console.log("Fikk databasekobling");
+            var val = [req.params.artikkelId];
+            connection.query(
+                "update artikkel set likes = likes + 1 where artikkelId=?",
+                val,
+                (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.json({ error: "Feil ved insert" });
+                    } else if (result.affectedRows == 0) {
+                        console.log("Ingen endret")
+                        res.status(500);
+                        res.json({ error: "Ingen endret" });
+                    } else {
+                        console.log("Update gjennomført");
+                        res.send("");
+                    }
+                }
+            );
+        }
+    });
+});
+
 app.delete("/Artikler/:artikkelId", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     pool.getConnection((err, connection) => {

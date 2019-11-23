@@ -2,16 +2,31 @@ import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
 import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView.js";
 import ArtikkelHenter from "../ArtikkelHenter.js";
+const axios = require('axios');
 
 export default class EditArticle extends Component {
     constructor(props) {
         super(props);
-        this.state = { kategori: '1', viktighet: '1' };
+        this.state = { kategori: '1', viktighet: '1', artikkler: [] };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.loadPreviousData = this.loadPreviousData.bind(this);
     }
+
+    componentDidMount() {
+        this.getArtikkler(0);
+    }
+    async getArtikkler(kategori) {
+        var testing = "http://localhost:8080";
+        axios
+            .get(testing + "/Artikler/kategori/" + kategori)
+            .then(data => { this.setState({ artikkler: data.data }) })
+            .catch(err => {
+                console.log(err);
+                return null;
+            });
+    };
 
     handleChange(event) {
         const target = event.target;
@@ -25,34 +40,52 @@ export default class EditArticle extends Component {
 
     handleSubmit(event) {
         // Input validering
-        if (this.state.artikkelId == null) {
-
+        if (this.state.artikkelId == null || this.state.artikkelId == "") {
+            document.getElementById("feedback").style.visibility = "visible";
         }
         else {
-
+            ArtikkelHenter.redigerArtikkel(this.state);
+            event.preventDefault();
         }
-        ArtikkelHenter.redigerArtikkel(this.state);
-        event.preventDefault();
     }
 
     loadPreviousData(event) {
-        //TODO: input validering
-        let artikkel = ArtikkelHenter.hentArtikkel(document.getElementById("formControlInput0").value);
-        console.log(artikkel);
-        document.getElementById("formControlInput1").value = artikkel.overskrift;
-        document.getElementById("formControlInput2").value = artikkel.innhold;
-        document.getElementById("formControlInput3").value = artikkel.bilde;
-        document.getElementById("formControlInput4").value = artikkel.bildeAlt;
-        document.getElementById("formControlSelect1").value = artikkel.kategoriId;
-        document.getElementById("formControlSelect2").value = artikkel.viktighet;
-        this.setState({
-            overskrift: artikkel.overskrift,
-            innhold: artikkel.innhold,
-            bilde: artikkel.bilde,
-            bildeAlt: artikkel.bildeAlt,
-            kategoriId: artikkel.kategoriId,
-            viktighet: artikkel.viktighet
-        });
+        // Input validering
+        if (this.state.artikkelId == null || this.state.artikkelId == "") {
+            document.getElementById("feedbackHent").style.visibility = "visible";
+            document.getElementById("feedbackHent").innerHTML = "Vennligst skriv inn en Id";
+        }
+        else {
+            var found = false;
+            for (var i = 0; i < this.state.artikkler.length; i++) {
+                if (this.state.artikkelId == this.state.artikkler[i].artikkelId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                document.getElementById("feedbackHent").style.visibility = "visible";
+                document.getElementById("feedbackHent").innerHTML = "Id matcher ingen av artikklene";
+            }
+            else {
+                let artikkel = ArtikkelHenter.hentArtikkel(document.getElementById("formControlInput0").value);
+                console.log(artikkel);
+                document.getElementById("formControlInput1").value = artikkel.overskrift;
+                document.getElementById("formControlInput2").value = artikkel.innhold;
+                document.getElementById("formControlInput3").value = artikkel.bilde;
+                document.getElementById("formControlInput4").value = artikkel.bildeAlt;
+                document.getElementById("formControlSelect1").value = artikkel.kategoriId;
+                document.getElementById("formControlSelect2").value = artikkel.viktighet;
+                this.setState({
+                    overskrift: artikkel.overskrift,
+                    innhold: artikkel.innhold,
+                    bilde: artikkel.bilde,
+                    bildeAlt: artikkel.bildeAlt,
+                    kategoriId: artikkel.kategoriId,
+                    viktighet: artikkel.viktighet
+                });
+            }
+        }
     }
 
     render() {
@@ -65,13 +98,14 @@ export default class EditArticle extends Component {
                 <Navbar location={location} />
                 <form className="w-75 mx-auto" onSubmit={this.handleSubmit}>
                     <div class="form-group">
-                        <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}>Noe gikk galt, vennligst sjekk input</h2>
+                        <h2 id="feedback" style={{ visibility: "hidden", color: "red" }}> Noe gikk galt, vennligst sjekk input</h2>
                     </div>
                     <div class="form-group">
                         <label for="formControlInput0">Artikkel id</label>
                         <div className="form-inline">
                             <input onChange={this.handleChange} name="artikkelId" type="number" className="form-control" id="formControlInput0" placeholder="eks: 23" />
                             <button className="btn btn-primary" type="button" onClick={this.loadPreviousData}>Hent data</button>
+                            <h4 id="feedbackHent" style={{ visibility: "hidden", color: "red", paddingLeft: "5px" }}>Noe gikk galt, vennligst sjekk input</h4>
                         </div>
                     </div>
                     <div class="form-group">
@@ -111,7 +145,10 @@ export default class EditArticle extends Component {
                     </div>
                 </form>
                 <h2 className="text-center">Artikler:</h2>
-                <ArticleIdandTitleView></ArticleIdandTitleView>
+                {this.state.artikkler.length === 0 ?
+                    <h4>Laster inn artikkler...</h4> :
+                    <ArticleIdandTitleView artikkler={this.state.artikkler}></ArticleIdandTitleView>
+                }
             </div>
         );
     }
