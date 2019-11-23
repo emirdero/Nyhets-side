@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
-import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView.js";
+import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView";
 import ArtikkelHenter from "../ArtikkelHenter.js";
 const axios = require('axios');
 

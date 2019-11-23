@@ -3,16 +3,17 @@ var bodyParser = require("body-parser");
 const path = require('path');
 var app = express();
 var mysql = require("mysql");
-var devmode = false;
+
 var pool = mysql.createPool({
     connectionLimit: 2,
     host: process.env.CI ? 'mysql' : devmode ? "localhost" : "mysql.stud.iie.ntnu.no",
-    user: devmode ? "root" : "emirde",
-    password: devmode ? "" : "5AeX3tYs",
-    database: devmode ? "mydb" : "emirde",
+    user: process.env.CI ? "root" : "emirde",
+    password: process.env.CI ? "secret" : "5AeX3tYs",
+    database: process.env.CI ? "mydb" : "emirde",
     debug: false
 });
-app.use(bodyParser.urlencoded()); // for å tolke JSON
+//app.use(bodyParser.urlencoded()); // for å tolke JSON
+app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -262,6 +263,7 @@ app.get("/Kommentarer/:kategoriId", (req, res) => {
 
 app.post("/Kommentarer", (req, res) => {
     console.log("Fikk POST-request fra klienten");
+    console.log(req.body);
     pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
@@ -272,14 +274,14 @@ app.post("/Kommentarer", (req, res) => {
             connection.query(
                 "insert into kommentar (innhold, artikkelId) values (?, ?)",
                 val,
-                err => {
+                (err, rows) => {
                     if (err) {
                         console.log(err);
                         res.status(500);
                         res.json({ error: "Feil ved insert" });
                     } else {
                         console.log("insert ok");
-                        res.send("");
+                        res.send(rows);
                     }
                 }
             );

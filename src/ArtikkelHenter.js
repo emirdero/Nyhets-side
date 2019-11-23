@@ -110,22 +110,6 @@ export default class ArtikkelHenter {
     )*/
     }
 
-
-
-    static async sendKommentar(innhold, artikkelId) {
-        axios.post(testing + '/Kommentarer', {
-            artikkelId: artikkelId,
-            innhold: innhold
-        })
-            .then(function (response) {
-                console.log(response);
-                return response;
-            })
-            .catch(function (error) {
-                return error;
-            })
-    }
-
     static async sendLikeComment(kommentarId) {
         axios.put(testing + '/Kommentarer/' + kommentarId)
             .then(function (response) {

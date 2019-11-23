@@ -1,16 +1,33 @@
 import React, { Component } from "react";
 import Navbar from "../components/Navbar.js";
-import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView.js";
+import { ArticleIdandTitleView } from "../components/ArticleIdandTitleView";
 import ArtikkelHenter from "../ArtikkelHenter";
+const axios = require('axios');
 
 export default class RemoveArticle extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = { artikkler: [] };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    componentDidMount() {
+        this.getArtikkler(0);
+    }
+
+    async getArtikkler(kategori) {
+        var testing = "http://localhost:8080";
+        axios
+            .get(testing + "/Artikler/kategori/" + kategori)
+            .then(data => { this.setState({ artikkler: data.data }) })
+            .catch(err => {
+                console.log(err);
+                return null;
+            });
+    };
+
 
     handleChange(event) {
         const target = event.target;
@@ -52,8 +69,13 @@ export default class RemoveArticle extends Component {
                         </div>
                     </div>
                 </form>
-                <h2 className="text-center">Artikler:</h2>
-                <ArticleIdandTitleView></ArticleIdandTitleView>
+                {this.state.artikkler.length === 0 ?
+                    (<h4>Laster inn artikkler...</h4>) :
+                    (<div>
+                        <h2 className="text-center">Artikler:</h2>
+                        <ArticleIdandTitleView artikkler={this.state.artikkler}></ArticleIdandTitleView>
+                    </div>)
+                }
             </div>
         );
     }

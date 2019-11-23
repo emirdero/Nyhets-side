@@ -1,7 +1,8 @@
 import React from "react";
 import { Component } from "react";
-import { CommentSection } from "../components/CommentSection.js";
+import { CommentSection, Comment } from "./CommentSection.js";
 import ArtikkelHenter from "../ArtikkelHenter";
+import $ from "jquery";
 const axios = require('axios');
 
 export class ArtikkelModalContainer extends Component {
@@ -10,10 +11,10 @@ export class ArtikkelModalContainer extends Component {
         artikkeler: this.props.artikkeler
     }
     componentDidMount() {
-        this.getArtikkler(this.props.artikkelId);
+        this.getComments(this.props.artikkelId);
     }
 
-    async getArtikkler(artikkelId) {
+    async getComments(artikkelId) {
         var testing = "http://localhost:8080";
         axios
             .get(testing + "/Kommentarer")
@@ -30,11 +31,38 @@ export class ArtikkelModalContainer extends Component {
 }
 
 class ArtikkelModal extends Component {
+    state = {
+        artikkel: this.props.artikkel,
+        kommentarer: this.props.kommentarer
+    }
+
     saveComment(artikkelId) {
-        var kommentarText = document.getElementById("nyComment").value;
-        ArtikkelHenter.sendKommentar(kommentarText, artikkelId);
-        alert("kommentar sendt!");
-        //document.getElementById("commentSection").appendChild(nyKommentar);
+        var kommentarText = document.getElementById("nyComment" + artikkelId).value;
+        this.sendKommentar(kommentarText, artikkelId);
+    }
+
+    async sendKommentar(innhold, artikkelId) {
+        var testing = "http://localhost:8080";
+        console.log(innhold);
+        const data = {
+            artikkelId: artikkelId,
+            innhold: innhold
+        };
+        axios.post(testing + '/Kommentarer', data)
+            .then(function (response) {
+                alert("kommentar sendt!");
+                var newComment = {
+                    innhold: innhold,
+                    navn: "Anonym",
+                    kommentarId: response.data.insertId
+                }
+                window.location.reload();
+                this.setState({ newComment: newComment });
+                return response;
+            })
+            .catch(function (error) {
+                return error;
+            })
     }
 
     likeArtikkel(artikkelId) {
@@ -63,6 +91,7 @@ class ArtikkelModal extends Component {
     render() {
         var artikkel = this.props.artikkel;
         var kommentarer = this.props.kommentarer;
+        console.log(this.state.newComment);
         return (
             <div className="modal fade" id={"artikkel" + artikkel.artikkelId} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
                 <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -88,13 +117,13 @@ class ArtikkelModal extends Component {
                             {kommentarer.length === 0 ?
                                 (<div className="mr-auto">Ingen kommentarer</div>) :
                                 (<div className="mr-auto">
-                                    <CommentSection artikkelId={artikkel.artikkelId} kommentarer={kommentarer}></CommentSection>
+                                    <CommentSection newComment={this.state.newComment} id={"CommentSection" + artikkel.artikkelId} artikkelId={artikkel.artikkelId} kommentarer={kommentarer}></CommentSection>
                                 </div>)
 
                             }
                         </div>
                         <div className="modal-footer">
-                            <input className="form-control" placeholder="Din kommentar" id="myComment" />
+                            <input className="form-control" placeholder="Din kommentar" id={"nyComment" + artikkel.artikkelId} />
                             <button type="button" className="btn btn-primary" onClick={() => this.saveComment(artikkel.artikkelId)}>Lagre</button>
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Lukk</button>
                         </div>

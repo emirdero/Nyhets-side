@@ -8,7 +8,7 @@ var pool = mysql.createPool({
     host: "mysql",
     user: "root",
     password: "secret",
-    database: "supertestdb",
+    database: "mydb",
     debug: false,
     multipleStatements: true
 });

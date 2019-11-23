@@ -14,6 +14,10 @@ export class CommentSection extends Component {
                 this.state.relevantComments.push(comment);
             }
         });
+        console.log(this.props.newComment);
+        if (this.props.newComment != null) {
+            this.state.relevantComments.push(this.props.newComment);
+        }
         this.loadingComments = false;
         this.forceUpdate();
     }
@@ -25,31 +29,37 @@ export class CommentSection extends Component {
                     (<div >
                         {this.state.relevantComments.length === 0 ?
                             (<h4>Ingen kommentarer</h4>) :
-                            (<div><h3>Kommentarer:</h3>
-                                {this.state.relevantComments.map(comment => {
-                                    return (
-                                        <div className="card">
-                                            <div class="container-fluid">
-                                                <div>
-                                                    <p className="sm">{comment.innhold}</p>
-                                                </div>
-                                                <div className="row ml-2">
-                                                    <p className="sm">Bruker: </p>
-                                                    <p className="sm">{comment.navn}</p>
-                                                    <div className="row ml-auto mr-1">
-                                                        <LikeButtonComment comment={comment}></LikeButtonComment>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
+                            (<div>
+                                <h3>Kommentarer:</h3>
+                                {this.state.relevantComments.map(comment => { return (<Comment comment={comment}></Comment>) })}
                             </div>)
                         }
                     </div>)
                 }
+            </div>)
+    }
+}
+
+export class Comment extends Component {
+    render() {
+        var comment = this.props.comment;
+        return (
+            <div className="card min-w-100">
+                <div className="container-fluid">
+                    <div>
+                        <p className="sm">{comment.innhold}</p>
+                    </div>
+                    <div className="row ml-2">
+                        <p className="sm">Bruker: </p>
+                        <p className="sm">{comment.navn}</p>
+                        <div className="row ml-auto mr-1">
+                            <LikeButtonComment comment={comment}></LikeButtonComment>
+                        </div>
+                    </div>
+                </div>
             </div>
-        )
+        );
+
     }
 }
 

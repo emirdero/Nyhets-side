@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "../components/Navbar.js";
-import { ArtikkelModalContainer } from "../components/ArtikkelModalContainer.js";
+import Navbar from "./Navbar.js";
+import { ArtikkelModalContainer } from "./ArtikkelModalContainer.js";
 import { Component } from "react";
 const axios = require('axios');
 
