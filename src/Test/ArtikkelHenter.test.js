@@ -1,14 +1,13 @@
 import ArticleService from "../ArticleService.js";
 var mysql = require("mysql");
-var app = require("../../server.js");
 const runsqlfile = require("./runsqlfile.js");
 
 // GitLab CI Pool
 var pool = mysql.createPool({
     connectionLimit: 1,
-    host: "mysql",
+    host: process.env.CI ? "mysql" : "localhost",
     user: "root",
-    password: "secret",
+    password: process.env.CI ? "secret" : "",
     database: "mydb",
     debug: false,
     multipleStatements: true
@@ -42,9 +41,9 @@ test("Hent artikkel med id 1", done => {
 });
 
 test("Fjern artikkel og sjekker at affected rows er 1", done => {
-    ArticleService.fjernArtikkel(1).then(response => {
+    ArticleService.fjernArtikkel(2).then(response => {
         console.log("Fjern artikkel resultat: " + JSON.stringify(response.data));
-        expect(response.data).toBe(1);
+        expect(response.status).toBe(200);
         done();
     })
 });
@@ -61,7 +60,6 @@ test("Legg til artikkel", done => {
     }
     ArticleService.addArticle(article).then(response => {
         var id = response.data.insertId;
-        console.log("Legg til artikkel resultat: " + JSON.stringify(response.data));
         expect(id).toBe(11);
         done();
     })

@@ -13,6 +13,14 @@ var pool = mysql.createPool({
     database: process.env.CI ? "mydb" : "emirde",
     debug: false
 });
+/*
+    For local testing:
+    host: "localhost", //process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
+    user: "root", // process.env.CI ? "root" : "emirde",
+    password: "", // process.env.CI ? "secret" : "5AeX3tYs",
+    database: "mydb", // process.env.CI ? "mydb" : "emirde",
+*/
+
 //app.use(bodyParser.urlencoded()); // for å tolke JSON
 app.use(bodyParser.json());
 
@@ -74,7 +82,6 @@ app.get("/Artikler/:artikkelId", (req, res) => {
                         res.json({ error: "error querying" });
                     }
                     else {
-                        console.log(rows);
                         res.json(rows);
                     }
                 }
@@ -96,14 +103,14 @@ app.post("/Artikler", (req, res) => {
             connection.query(
                 "insert into artikkel (overskrift,innhold,fultInnhold,bilde,bildeAlt,kategoriId,viktighet) values (?,?,?,?,?,?,?)",
                 val,
-                err => {
+                (err, rows) => {
                     if (err) {
                         console.log(err);
                         res.status(500);
                         res.json({ error: "Feil ved insert" });
                     } else {
                         console.log("insert ok");
-                        res.send("");
+                        res.send(rows);
                     }
                 }
             );
@@ -197,7 +204,7 @@ app.delete("/Artikler/:artikkelId", (req, res) => {
                         res.json({ error: "Ingen slettet" });
                     } else {
                         console.log("Slett gjennomført");
-                        res.send(result.affectedRows);
+                        res.sendStatus(200);
                     }
                 }
             );
@@ -263,7 +270,6 @@ app.get("/Kommentarer/:kategoriId", (req, res) => {
 
 app.post("/Kommentarer", (req, res) => {
     console.log("Fikk POST-request fra klienten");
-    console.log(req.body);
     pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
@@ -320,6 +326,6 @@ app.put("/Kommentarer/:kommentarId", (req, res) => {
     });
 });
 
-let port = 80;
+let port = 8080;
 console.log("listening on port: " + port)
 var server = app.listen(port);

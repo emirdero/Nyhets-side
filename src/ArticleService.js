@@ -1,7 +1,7 @@
 
 // @flow
 const axios = require('axios');
-var testingUrl = "http://localhost:80" //process.env.CI ? "/localhost:80" : "";
+var testingUrl = "http://localhost:8080" //process.env.CI ? "/localhost:80" : "";
 
 export default class ArticleService {
     constructor() {
@@ -15,15 +15,15 @@ export default class ArticleService {
         return axios.get(testingUrl + '/Artikler/' + artikkelId);
     }
 
-    static async fjernArtikkel(artikkelId: Number) {
+    static fjernArtikkel(artikkelId: Number) {
         return axios.delete(testingUrl + '/Artikler/' + artikkelId);
     }
 
-    static async redigerArtikkel(state: Object) {
+    static redigerArtikkel(state: Object) {
         return axios.post(testingUrl + '/Artikler/' + state.artikkelId, state);
     }
 
-    static async addArticle(state: Object) {
+    static addArticle(state: Object) {
         return axios.post(testingUrl + '/Artikler', state);
     }
 
@@ -31,15 +31,15 @@ export default class ArticleService {
         return axios.get(testingUrl + '/Kommentarer/');
     }
 
-    static async sendLikeComment(kommentarId: number) {
+    static sendLikeComment(kommentarId: number) {
         return axios.put(testingUrl + '/Kommentarer/' + kommentarId);
     }
 
-    static async sendLikeArticle(artikkelId: number) {
+    static sendLikeArticle(artikkelId: number) {
         return axios.put(testingUrl + '/Artikler/Like/' + artikkelId);
     }
 
-    static async sendComment(data: Object) {
+    static sendComment(data: Object) {
         return axios.post(testingUrl + '/Kommentarer', data);
     }
 }
