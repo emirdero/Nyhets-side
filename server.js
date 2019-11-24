@@ -6,19 +6,25 @@ var app = express();
 var mysql = require("mysql");
 
 var pool = mysql.createPool({
-    connectionLimit: 2,
-    host: process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
-    user: process.env.CI ? "root" : "emirde",
-    password: process.env.CI ? "secret" : "5AeX3tYs",
-    database: process.env.CI ? "mydb" : "emirde",
+    connectionLimit: 6,
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "mydb",
     debug: false
 });
 /*
     For local testing:
-    host: "localhost", //process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
-    user: "root", // process.env.CI ? "root" : "emirde",
-    password: "", // process.env.CI ? "secret" : "5AeX3tYs",
-    database: "mydb", // process.env.CI ? "mydb" : "emirde",
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "mydb",
+
+    For Production:
+    host: process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
+    user: process.env.CI ? "root" : "emirde",
+    password: process.env.CI ? "secret" : "5AeX3tYs",
+    database: process.env.CI ? "mydb" : "emirde",
 */
 
 //app.use(bodyParser.urlencoded()); // for å tolke JSON
