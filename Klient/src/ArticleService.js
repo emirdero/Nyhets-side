@@ -37,7 +37,7 @@ export default class ArticleService {
   }
 
   static async redigerArtikkel(state: Object) {
-    return axios.post<Article, void>(
+    return axios.put<Article, void>(
       testingUrl + "/Artikler/" + state.artikkelId.toString(),
       state
     );
