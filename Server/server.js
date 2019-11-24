@@ -22,10 +22,10 @@ const ArticleDao = require("./dao/ArticleDao.js");
     database: "mydb",
 
     For Production:
-    host: process.env.CI ? 'mysql' : "mysql.stud.iie.ntnu.no",
-    user: process.env.CI ? "root" : "emirde",
-    password: process.env.CI ? "secret" : "5AeX3tYs",
-    database: process.env.CI ? "mydb" : "emirde",
+    host: "mysql.stud.iie.ntnu.no",
+    user: emirde",
+    password: 5AeX3tYs",
+    database: emirde",
 */
 
 //app.use(bodyParser.urlencoded()); // for å tolke JSON
