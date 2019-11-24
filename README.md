@@ -5,6 +5,7 @@
 <h3>For å kjøre siden trenger man å bygge klienten, deretter kjøre serveren.
 
 <h3> 1. Bygge klienten
+
 ```sh
 cd Klient
 npm install
@@ -13,6 +14,7 @@ cd ..
 ```
 
 <h3> 2. Kjøre serveren
+
 ```sh
 cd Server
 npm install
