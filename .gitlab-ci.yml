@@ -17,6 +17,10 @@ run_tests:
     - npm install
     - npm test
     - npm run flow
+    - cd ../Klient/
+    - npm install
+    - npm test
+    - npm run flow
 
   artifacts:
     paths:
