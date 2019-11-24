@@ -12,6 +12,7 @@ variables:
 # Install node libraries
 before_script:
   - npm install
+  - npm install pm2 -g
   - pm2 start server.js
 
 # Run JEST tests

@@ -320,6 +320,6 @@ app.put("/Kommentarer/:kommentarId", (req, res) => {
     });
 });
 
-let port = 80;
+let port = process.env.CI ? 1234 : 80;
 console.log("listening on port: " + port)
 var server = app.listen(port);

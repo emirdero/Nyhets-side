@@ -1,44 +1,45 @@
 
 // @flow
 const axios = require('axios');
+var testingUrl = process.env.CI ? "/localhost:1234" : "";
 
 export default class ArticleService {
     constructor() {
         this.previousData = [];
     }
     static getArticles(kategori: Number) {
-        return axios.get('/Artikler/kategori/' + kategori);
+        return axios.get(testingUrl + '/Artikler/kategori/' + kategori);
     }
 
     static hentArtikkel(artikkelId: Number) {
-        return axios.get('/Artikler/' + artikkelId);
+        return axios.get(testingUrl + '/Artikler/' + artikkelId);
     }
 
     static async fjernArtikkel(artikkelId: Number) {
-        return axios.delete('/Artikler/' + artikkelId);
+        return axios.delete(testingUrl + '/Artikler/' + artikkelId);
     }
 
     static async redigerArtikkel(state: Object) {
-        return axios.post('/Artikler/' + state.artikkelId, state);
+        return axios.post(testingUrl + '/Artikler/' + state.artikkelId, state);
     }
 
     static async leggTilArtikkel(state: Object) {
-        return axios.post('/Artikler', state);
+        return axios.post(testingUrl + '/Artikler', state);
     }
 
     static getAllComments() {
-        return axios.get('/Kommentarer/');
+        return axios.get(testingUrl + '/Kommentarer/');
     }
 
     static async sendLikeComment(kommentarId: number) {
-        return axios.put('/Kommentarer/' + kommentarId);
+        return axios.put(testingUrl + '/Kommentarer/' + kommentarId);
     }
 
     static async sendLikeArticle(artikkelId: number) {
-        return axios.put('/Artikler/Like/' + artikkelId);
+        return axios.put(testingUrl + '/Artikler/Like/' + artikkelId);
     }
 
     static async sendComment(data: Object) {
-        return axios.post('/Kommentarer', data);
+        return axios.post(testingUrl + '/Kommentarer', data);
     }
 }
