@@ -9,14 +9,22 @@ export class ArticleView extends Component {
         articles: []
     }
     componentDidMount() {
-        ArticleService.getArticles(this.props.kategori)
+        var kategoriId = this.props.kategori;
+        ArticleService.getArticles(kategoriId)
             .then(data => { this.setState({ articles: data.data }) })
             .catch(err => {
                 console.log(err);
                 return null;
             });
+        setInterval(() => {
+            ArticleService.getArticles(kategoriId)
+                .then(data => { this.setState({ articles: data.data }) })
+                .catch(err => {
+                    console.log(err);
+                    return null;
+                });
+        }, 10000);
     }
-
     render() {
         return (
             <div>

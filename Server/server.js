@@ -13,6 +13,7 @@ var pool = mysql.createPool({
     database: "mydb",
     debug: false
 });
+const ArticleDao = require("./dao/ArticleDao.js");
 /*
     For local testing:
     host: "localhost",
@@ -30,14 +31,22 @@ var pool = mysql.createPool({
 //app.use(bodyParser.urlencoded()); // for å tolke JSON
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, 'build')));
+var articleDao = new ArticleDao(pool);
+
+app.use(express.static(path.join(__dirname, '/../Klient/build')));
 
 app.get("/Artikler/kategori/:kategoriId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.header("Access-Control-Allow-Origin", "localhost"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    console.log("Fikk request fra klient");
-    pool.getConnection((err, connection) => {
+    console.log("Fikk hent artikler request fra klient");
+
+    articleDao.getArticles(req.params.kategoriId, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    })
+    /*pool.getConnection((err, connection) => {
         console.log("Connected to database");
         if (err) {
             console.log("Feil ved kobling til databasen");
@@ -64,14 +73,21 @@ app.get("/Artikler/kategori/:kategoriId", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 app.get("/Artikler/:artikkelId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.header("Access-Control-Allow-Origin", "localhost"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("Fikk request fra klient");
+
+    articleDao.getArticle(req.params.artikkelId, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    })
+    /*
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
         if (err) {
@@ -93,13 +109,21 @@ app.get("/Artikler/:artikkelId", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 app.post("/Artikler", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     console.log("Overskrift: " + req.body.overskrift);
-    pool.getConnection((err, connection) => {
+
+    articleDao.postArticle(req.body, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    })
+    /*pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
             res.json({ error: "feil ved oppkobling" });
@@ -121,13 +145,20 @@ app.post("/Artikler", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 app.put("/Artikler/:artikkelId", (req, res) => {
     console.log("Fikk POST-request fra klienten");
     console.log("Overskrift: " + req.body.overskrift);
-    pool.getConnection((err, connection) => {
+    articleDao.editArticle(req.body, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    });
+    /*pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
             res.json({ error: "feil ved oppkobling" });
@@ -153,12 +184,19 @@ app.put("/Artikler/:artikkelId", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 app.put("/Artikler/Like/:artikkelId", (req, res) => {
-    console.log("Fikk POST-request fra klienten");
-    pool.getConnection((err, connection) => {
+    console.log("Fikk like-request fra klienten");
+    articleDao.likeArticle(req.params.artikkelId, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    });
+    /*pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
             res.json({ error: "feil ved oppkobling" });
@@ -184,12 +222,19 @@ app.put("/Artikler/Like/:artikkelId", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 app.delete("/Artikler/:artikkelId", (req, res) => {
-    console.log("Fikk POST-request fra klienten");
-    pool.getConnection((err, connection) => {
+    console.log("Fikk slett artikkel fra klienten");
+    articleDao.deleteArticle(req.params.artikkelId, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    });
+    /*pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
             res.json({ error: "feil ved oppkobling" });
@@ -215,12 +260,20 @@ app.delete("/Artikler/:artikkelId", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 app.get("/Kommentarer", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    console.log("Fikk request fra klient");
+    console.log("Fikk get kommetar request fra klient");
+    articleDao.getComments((status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    });
+    /*
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
         if (err) {
@@ -242,12 +295,19 @@ app.get("/Kommentarer", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
-app.get("/Kommentarer/:kategoriId", (req, res) => {
+/*app.get("/Kommentarer/:kategoriId", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     console.log("Fikk request fra klient");
+    articleDao.getComment((status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    });
     pool.getConnection((err, connection) => {
         console.log("Connected to database");
         if (err) {
@@ -271,11 +331,20 @@ app.get("/Kommentarer/:kategoriId", (req, res) => {
             );
         }
     });
-});
+});*/
 
 
 app.post("/Kommentarer", (req, res) => {
     console.log("Fikk POST-request fra klienten");
+
+    articleDao.sendComment(req.body, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    });
+    /*
     pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
@@ -298,12 +367,19 @@ app.post("/Kommentarer", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 app.put("/Kommentarer/:kommentarId", (req, res) => {
     console.log("Fikk POST-request fra klienten");
-    pool.getConnection((err, connection) => {
+    articleDao.likeComment(req.params.kommentarId, (status, data) => {
+        if (status === "500") {
+            res.json({ error: "error querying" });
+        } else {
+            res.json(data);
+        }
+    });
+    /*pool.getConnection((err, connection) => {
         if (err) {
             console.log("Feil ved oppkobling");
             res.json({ error: "feil ved oppkobling" });
@@ -329,7 +405,7 @@ app.put("/Kommentarer/:kommentarId", (req, res) => {
                 }
             );
         }
-    });
+    });*/
 });
 
 let port = 8080;

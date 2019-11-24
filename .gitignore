@@ -1,2 +1,3 @@
-/node_modules
-/build
+/Klient/node_modules
+/Server/node_modules
+/Klient/build
