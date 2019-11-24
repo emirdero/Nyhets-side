@@ -33,7 +33,7 @@ pages:
     - run_tests
   script:
     - mkdir .public
-    - cp -r coverage/* .public
+    - cp -r Server/coverage/* .public
     - mv .public public
   artifacts:
     paths:
