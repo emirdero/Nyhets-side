@@ -10,7 +10,7 @@ INSERT INTO artikkel (overskrift, innhold, fultInnhold, innleggelseTid, bilde, b
 ('Emir er best', 'wow så kul', 'Augue interdum velit euismod in pellentesque massa. Elementum sagittis vitae et leo duis. Turpis egestas maecenas pharetra convallis posuere morbi leo urna. Suspendisse faucibus interdum posuere lorem ipsum. Duis ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Accumsan in nisl nisi scelerisque eu. Vitae aliquet nec ullamcorper sit amet risus nullam. Felis bibendum ut tristique et egestas quis ipsum. Mauris pellentesque pulvinar pellentesque habitant morbi. Et tortor consequat id porta nibh venenatis cras. Tortor posuere ac ut consequat. Vestibulum lectus mauris ultrices eros. Massa sapien faucibus et molestie ac feugiat sed lectus vestibulum. Ornare suspendisse sed nisi lacus sed viverra. Orci eu lobortis elementum nibh.', '2019-10-27 21:58:00', 'https://previews.123rf.com/images/imagerymajestic/imagerymajestic0811/imagerymajestic081100638/3825934-cool-guy-showing-hand-gesture-against-white-background.jpg', 'kul type', 2, 1, 2),
 ('Javascript injection rammer siden!', 'Javascript fra andre kan kjøres på maskinen din om utvikleren ikke er forsiktig', 'Heldigvis er denne siden trygg <script>alert(\"sike!\")</script>', '2019-11-23 22:04:37', 'https://3er1viui9wo30pkxh1v2nh4w-wpengine.netdna-ssl.com/wp-content/uploads/prod/sites/358/2019/08/GettyImages-914818226-1024x677.jpg', 'En hacker', 2, 1, 0);
 
-INSERT INTO kategori (navn) VALUES
+INSERT INTO kategori (kategoriId, navn) VALUES
 (0, 'alle'),
 (1, 'sport'),
 (2, 'nyheter'),
