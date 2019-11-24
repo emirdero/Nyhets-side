@@ -1,7 +1,7 @@
 
 // @flow
 const axios = require('axios');
-var testingUrl = process.env.CI ? "/localhost:80" : "";
+var testingUrl = "http://localhost:80" //process.env.CI ? "/localhost:80" : "";
 
 export default class ArticleService {
     constructor() {
