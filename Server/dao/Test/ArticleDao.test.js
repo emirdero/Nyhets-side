@@ -72,6 +72,24 @@ test("Legg til artikkel", done => {
     articleDao.postArticle(article, callback);
 });
 
+test("Endre artikkel", done => {
+    var article = {
+        overskrift: "Test",
+        innhold: "Test",
+        fultInnhold: "Test",
+        bilde: "www.test.com/test.jpg",
+        bildeAlt: "Test bilde",
+        kategori: 1,
+        viktighet: 1,
+        artikkelId: 1
+    }
+    function callback(status, response) {
+        expect(response.affectedRows).toBe(1);
+        done();
+    }
+    articleDao.editArticle(article, callback);
+});
+
 test("Hent kommentarer og sjekk den første kommentaren", done => {
     function callback(status, response) {
         let comments = response;
