@@ -135,7 +135,7 @@ app.put("/Artikler/:artikkelId", (req, res) => {
                         res.json({ error: "Ingen endret" });
                     } else {
                         console.log("Update gjennomført");
-                        res.send("");
+                        res.send(result);
                     }
                 }
             );
@@ -197,7 +197,7 @@ app.delete("/Artikler/:artikkelId", (req, res) => {
                         res.json({ error: "Ingen slettet" });
                     } else {
                         console.log("Slett gjennomført");
-                        res.send("");
+                        res.send(result.affectedRows);
                     }
                 }
             );
@@ -320,6 +320,6 @@ app.put("/Kommentarer/:kommentarId", (req, res) => {
     });
 });
 
-let port = process.env.CI ? 1234 : 80;
+let port = 80;
 console.log("listening on port: " + port)
 var server = app.listen(port);

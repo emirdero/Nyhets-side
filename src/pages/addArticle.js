@@ -22,7 +22,7 @@ export default class AddArticle extends Component {
     }
 
     handleSubmit(event) {
-        ArticleService.leggTilArtikkel(this.state)
+        ArticleService.addArticle(this.state)
             .then(data => { window.location = "/" });
         event.preventDefault();
     }

@@ -63,7 +63,7 @@ export default class EditArticle extends Component {
                 document.getElementById("feedbackHent").innerHTML = "Id matcher ingen av artikklene";
             }
             else {
-                ArticleService.hentArtikkel(document.getElementById("formControlInput0").value)
+                ArticleService.getArticle(document.getElementById("formControlInput0").value)
                     .then(response => {
                         let artikkel = response.data[0];
                         console.log(artikkel);

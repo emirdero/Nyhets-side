@@ -24,14 +24,54 @@ afterAll(() => {
     pool.end();
 });
 
-test("get one person from db", done => {
+test("Hent artikkler og sjekk den første artikkelen", done => {
     ArticleService.getArticles(0).then(response => {
         let articles = response.data
-        console.log(
-            "Test callback: data=" + JSON.stringify(articles)
-        );
-        expect(articles.length).toBe(9);
-        expect(articles[0].overskrift).toBe("Ugler i mosen");
+        console.log("Test callback: første artikkel" + JSON.stringify(articles[0]));
+        expect(articles.length).toBe(10);
+        expect(articles[0].overskrift).toBe("Javascript injection rammer siden!");
+        done();
+    })
+});
+
+test("Hent artikkel med id 1", done => {
+    ArticleService.getArticle(1).then(response => {
+        let article = response.data[0];
+        expect(article.overskrift).toBe("Ugler i mosen");
+        done();
+    })
+});
+
+test("Fjern artikkel og sjekker at affected rows er 1", done => {
+    ArticleService.fjernArtikkel(1).then(response => {
+        expect(response.data).toBe(1);
+        done();
+    })
+});
+
+test("Legg til artikkel", done => {
+    var article = {
+        overskrift: "Test",
+        innhold: "Test",
+        fultInnhold: "Test",
+        bilde: "www.test.com/test.jpg",
+        bildeAlt: "Test bilde",
+        kategori: 1,
+        viktighet: 1
+    }
+    ArticleService.addArticle(article).then(response => {
+        var id = response.data.insertId;
+        expect(id).toBe(11);
+        done();
+    })
+});
+
+test("Hent kommentarer og sjekk den første kommentaren", done => {
+    ArticleService.getAllComments().then(response => {
+        let comments = response.data;
+        console.log("Test callback: første kommentar" + JSON.stringify(comments[0]));
+        expect(comments.length).toBe(6);
+        expect(comments[0].innhold).toBe("Wow, programmerte han denne helt selv?!");
         done();
     })
 });

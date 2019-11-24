@@ -43,7 +43,3 @@ ALTER TABLE kategori
 
 ALTER TABLE kommentar
   MODIFY kommentarId int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE kommentar
-  ADD CONSTRAINT arikkelId foregin key FOREIGN KEY (artikkelId) REFERENCES artikkel (artikkelId);
-COMMIT;

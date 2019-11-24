@@ -1,7 +1,7 @@
 
 // @flow
 const axios = require('axios');
-var testingUrl = process.env.CI ? "/localhost:1234" : "";
+var testingUrl = process.env.CI ? "/localhost:80" : "";
 
 export default class ArticleService {
     constructor() {
@@ -11,7 +11,7 @@ export default class ArticleService {
         return axios.get(testingUrl + '/Artikler/kategori/' + kategori);
     }
 
-    static hentArtikkel(artikkelId: Number) {
+    static getArticle(artikkelId: Number) {
         return axios.get(testingUrl + '/Artikler/' + artikkelId);
     }
 
@@ -23,7 +23,7 @@ export default class ArticleService {
         return axios.post(testingUrl + '/Artikler/' + state.artikkelId, state);
     }
 
-    static async leggTilArtikkel(state: Object) {
+    static async addArticle(state: Object) {
         return axios.post(testingUrl + '/Artikler', state);
     }
 
