@@ -27,7 +27,7 @@ afterAll(() => {
 
 test("Hent artikkler og sjekk den første artikkelen", done => {
     function callback(status, response) {
-        console.log("Status: " + status);
+        expect(status).toBe("200");
         expect(response.length).toBe(10);
         expect(response[0].overskrift).toBe("Javascript injection rammer siden!");
         done();
@@ -37,7 +37,7 @@ test("Hent artikkler og sjekk den første artikkelen", done => {
 
 test("Hent artikkel med id 1", done => {
     function callback(status, response) {
-        console.log("Status: " + status);
+        expect(status).toBe("200");
         let article = response[0];
         expect(article.overskrift).toBe("Ugler i mosen");
         done();
@@ -47,8 +47,7 @@ test("Hent artikkel med id 1", done => {
 
 test("Fjern artikkel og sjekker at affected rows er 1", done => {
     function callback(status, response) {
-        console.log("Status: " + status);
-        console.log("Fjern artikkel resultat: " + JSON.stringify(response));
+        expect(status).toBe("200");
         expect(response.affectedRows).toBe(1);
         done();
     }
@@ -66,6 +65,7 @@ test("Legg til artikkel", done => {
         viktighet: 1
     }
     function callback(status, response) {
+        expect(status).toBe("200");
         expect(response.insertId).toBe(11);
         done();
     }
@@ -84,6 +84,7 @@ test("Endre artikkel", done => {
         artikkelId: 1
     }
     function callback(status, response) {
+        expect(status).toBe("200");
         expect(response.affectedRows).toBe(1);
         done();
     }
@@ -93,79 +94,41 @@ test("Endre artikkel", done => {
 test("Hent kommentarer og sjekk den første kommentaren", done => {
     function callback(status, response) {
         let comments = response;
-        console.log("Første kommentar: " + JSON.stringify(comments[0]));
+        expect(status).toBe("200");
         expect(comments.length).toBe(6);
         expect(comments[0].innhold).toBe("Wow, programmerte han denne helt selv?!");
         done();
     }
     articleDao.getComments(callback);
 });
-/*
-test("get unknown person from db", done => {
-    function callback(status, data) {
-        console.log(
-            "Test callback: status=" + status + ", data=" + JSON.stringify(data)
-        );
-        expect(data.length).toBe(0);
+
+test("Lik artikkel", done => {
+    function callback(status, response) {
+        expect(status).toBe("200");
+        expect(response.affectedRows).toBe(1);
         done();
     }
-
-    personDao.getOne(0, callback);
+    articleDao.likeArticle(1, callback);
 });
 
-test("add person to db", done => {
-    function callback(status, data) {
-        console.log(
-            "Test callback: status=" + status + ", data=" + JSON.stringify(data)
-        );
-        expect(data.affectedRows).toBeGreaterThanOrEqual(1);
+test("Lik kommentar", done => {
+    function callback(status, response) {
+        expect(status).toBe("200");
+        expect(response.affectedRows).toBe(1);
         done();
     }
-
-    personDao.createOne(
-        { navn: "Nils Nilsen", alder: 34, adresse: "Gata 3" },
-        callback
-    );
+    articleDao.likeComment(1, callback);
 });
 
-test("get all persons from db", done => {
-    function callback(status, data) {
-        console.log(
-            "Test callback: status=" + status + ", data.length=" + data.length
-        );
-        expect(data.length).toBeGreaterThanOrEqual(2);
+test("Legg til kommetar", done => {
+    var comment = {
+        articleId: 1,
+        innhold: "Test"
+    }
+    function callback(status, response) {
+        expect(status).toBe("200");
+        expect(response.insertId).toBe(7);
         done();
     }
-    personDao.getAll(callback);
+    articleDao.sendComment(comment, callback);
 });
-
-test("test rediger", done => {
-    function callback(status, data) {
-        console.log(
-            "Test callback: status=" + status + ", data.length=" + data.length
-        );
-        expect(data.affectedRows).toBeGreaterThanOrEqual(1);
-        done();
-    }
-
-    personDao.editOne(
-        { navn: "Nils Nilsen", alder: 34, adresse: "Gata 3" }, 1,
-        callback
-    );
-});
-
-test("test slett", done => {
-    function callback(status, data) {
-        console.log(
-            "Test callback: status=" + status + ", data.length=" + data.length
-        );
-        expect(data.affectedRows).toBeGreaterThanOrEqual(1);
-        done();
-    }
-
-    personDao.deleteOne(
-        1,
-        callback
-    );
-});
-*/

@@ -9,16 +9,15 @@ variables:
   MYSQL_DATABASE: mydb
   MYSQL_ROOT_PASSWORD: secret
 
-# Install node libraries
-before_script:
-  - cd Server/
-  - npm install
-
 # Run JEST tests
 run_tests:
   stage: test
   script:
+    - cd Server/
+    - npm install
     - npm test
+    - npm run flow
+
   artifacts:
     paths:
       - coverage/

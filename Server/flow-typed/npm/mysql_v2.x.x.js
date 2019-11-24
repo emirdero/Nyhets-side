@@ -1,4 +1,4 @@
-// flow-typed signature: 9e2402bfb2c488b23c4c12aa59418142
+// flow-typed signature: c88436aba2c98d85d79c75fd283c917f
 // flow-typed version: c3e3979308/mysql_v2.x.x/flow_>=v0.104.x
 
 // TODO: Events on event emitters
