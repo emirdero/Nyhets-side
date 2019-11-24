@@ -26,8 +26,7 @@ afterAll(() => {
 
 test("Hent artikkler og sjekk den første artikkelen", done => {
     ArticleService.getArticles(0).then(response => {
-        let articles = response.data
-        console.log("Test callback: første artikkel" + JSON.stringify(articles[0]));
+        let articles = response.data;
         expect(articles.length).toBe(10);
         expect(articles[0].overskrift).toBe("Javascript injection rammer siden!");
         done();
@@ -44,6 +43,7 @@ test("Hent artikkel med id 1", done => {
 
 test("Fjern artikkel og sjekker at affected rows er 1", done => {
     ArticleService.fjernArtikkel(1).then(response => {
+        console.log("Fjern artikkel resultat: " + JSON.stringify(response.data));
         expect(response.data).toBe(1);
         done();
     })
@@ -61,6 +61,7 @@ test("Legg til artikkel", done => {
     }
     ArticleService.addArticle(article).then(response => {
         var id = response.data.insertId;
+        console.log("Legg til artikkel resultat: " + JSON.stringify(response.data));
         expect(id).toBe(11);
         done();
     })
@@ -69,7 +70,7 @@ test("Legg til artikkel", done => {
 test("Hent kommentarer og sjekk den første kommentaren", done => {
     ArticleService.getAllComments().then(response => {
         let comments = response.data;
-        console.log("Test callback: første kommentar" + JSON.stringify(comments[0]));
+        console.log("Første kommentar: " + JSON.stringify(comments[0]));
         expect(comments.length).toBe(6);
         expect(comments[0].innhold).toBe("Wow, programmerte han denne helt selv?!");
         done();
