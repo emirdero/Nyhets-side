@@ -7,39 +7,39 @@ export default class ArticleService {
     constructor() {
         this.previousData = [];
     }
-    static getArticles(kategori: Number) {
+    static async getArticles(kategori: Number) {
         return axios.get(testingUrl + '/Artikler/kategori/' + kategori);
     }
 
-    static getArticle(artikkelId: Number) {
+    static async getArticle(artikkelId: Number) {
         return axios.get(testingUrl + '/Artikler/' + artikkelId);
     }
 
-    static fjernArtikkel(artikkelId: Number) {
+    static async fjernArtikkel(artikkelId: Number) {
         return axios.delete(testingUrl + '/Artikler/' + artikkelId);
     }
 
-    static redigerArtikkel(state: Object) {
+    static async redigerArtikkel(state: Object) {
         return axios.post(testingUrl + '/Artikler/' + state.artikkelId, state);
     }
 
-    static addArticle(state: Object) {
+    static async addArticle(state: Object) {
         return axios.post(testingUrl + '/Artikler', state);
     }
 
-    static getAllComments() {
+    static async getAllComments() {
         return axios.get(testingUrl + '/Kommentarer/');
     }
 
-    static sendLikeComment(kommentarId: number) {
+    static async sendLikeComment(kommentarId: number) {
         return axios.put(testingUrl + '/Kommentarer/' + kommentarId);
     }
 
-    static sendLikeArticle(artikkelId: number) {
+    static async sendLikeArticle(artikkelId: number) {
         return axios.put(testingUrl + '/Artikler/Like/' + artikkelId);
     }
 
-    static sendComment(data: Object) {
+    static async sendComment(data: Object) {
         return axios.post(testingUrl + '/Kommentarer', data);
     }
 }
