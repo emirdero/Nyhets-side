@@ -4,7 +4,7 @@ const runsqlfile = require("./runsqlfile.js");
 
 // GitLab CI Pool
 var pool = mysql.createPool({
-    connectionLimit: 1,
+    connectionLimit: 4,
     host: process.env.CI ? "mysql" : "localhost",
     user: "root",
     password: process.env.CI ? "secret" : "",

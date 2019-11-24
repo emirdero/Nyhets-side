@@ -6,7 +6,7 @@ var app = express();
 var mysql = require("mysql");
 
 var pool = mysql.createPool({
-    connectionLimit: 4,
+    connectionLimit: 6,
     host: "localhost",
     user: "root",
     password: "",
