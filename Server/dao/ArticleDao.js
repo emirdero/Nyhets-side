@@ -1,6 +1,6 @@
 //@flow
 
-const Dao = require("./dao.js");
+const Dao = require("./Dao.js");
 
 module.exports = class ArticleDao extends Dao {
   getArticles(
