@@ -39,12 +39,3 @@ ALTER TABLE kategori
 ALTER TABLE kommentar
   ADD PRIMARY KEY (kommentarId),
   ADD KEY arikkelId (artikkelId);
-
-ALTER TABLE artikkel
-  MODIFY artikkelId int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE kategori
-  MODIFY kategoriId int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE kommentar
-  MODIFY kommentarId int(11) NOT NULL AUTO_INCREMENT;
