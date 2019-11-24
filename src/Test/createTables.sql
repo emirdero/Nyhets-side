@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS kommentar;
+DROP TABLE IF EXISTS artikkel;
+DROP TABLE IF EXISTS kategori;
+
+
 CREATE TABLE artikkel (
   artikkelId int(11) NOT NULL,
   overskrift text NOT NULL,
