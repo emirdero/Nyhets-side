@@ -97,7 +97,7 @@ module.exports = class ArticleDao extends Dao {
   ) {
     super.query(
       "insert into kommentar (innhold, artikkelId) values (?, ?)",
-      [comment.innhold, comment.articleId],
+      [comment.innhold, comment.artikkelId],
       callback
     );
   }
