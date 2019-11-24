@@ -15,7 +15,9 @@ var pool = mysql.createPool({
 });
 
 beforeAll(done => {
-    runsqlfile("src/Test/mydb.sql", pool, done);
+    runsqlfile("src/Test/createTables.sql", pool, () => {
+        runsqlfile("src/Test/insertData.sql", pool, done);
+    });
 });
 
 afterAll(() => {
