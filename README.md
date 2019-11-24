@@ -4,6 +4,7 @@
 
 <h3>For å kjøre siden trenger man å bygge klienten, deretter kjøre serveren.
 
+
 1. Bygge klienten:
 
 ```sh
@@ -25,6 +26,7 @@ npm start
 http://localhost:8080/
 
 <h2>Hvordan teste siden
+
 
 1. Teste klienten:
 
